@@ -14,8 +14,8 @@
     <body>
         <div class="container my-5">
             <div class="p-5 text-center bg-body-tertiary rounded-3">
-                <div class="container row gx-5">
-                    <div class="container col-6">
+                <div class="row gx-5">
+                    <div class="col-6">
                         <div
                             id="carouselExampleAutoplaying"
                             class="carousel slide"
@@ -86,46 +86,13 @@
                         </div>
                     </div>
 
-                    <div class="container col-6">
-                        <div class="row">
-                            <div class="col-10">
-                                <input
-                                    type="text"
-                                    id="comment"
-                                    name="comment"
-                                    class="form-control"
-                                    placeholder="이 리뷰를 평가해 줘!!"
-                                />
-                            </div>
+                    <div class="col-6">
+                        <div>댓글 통계</div>
+                        <button type="button" class="btn">
+                            댓글 달아 주세요! ^^
+                        </button>
 
-                            <button
-                                class="btn col-1"
-                                type="button"
-                                id="like"
-                                onclick="like()"
-                            >
-                                <img
-                                    src="/Detail/thumb-up-32.png"
-                                    alt="이미지"
-                                />
-                            </button>
-
-                            <button
-                                class="btn col-1 text-center"
-                                type="button"
-                                id="unlike"
-                                onclick="unlike()"
-                            >
-                                <img
-                                    src="/Detail/thumb-down-32.png"
-                                    style="object-fit: cover"
-                                    alt="이미지"
-                                />
-                            </button>
-                        </div>
-                        <div>
-                            <p id="commentResult"></p>
-                        </div>
+                        <div></div>
                     </div>
                 </div>
             </div>
@@ -137,11 +104,3 @@
         ></script>
     </body>
 </html>
-
-<script>
-    function like() {
-        const comment = document.querySelector("[name=comment]").value;
-
-        const data = fetch("/store/comment?like=1");
-    }
-</script>
