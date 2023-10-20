@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>로그인</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
+        integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <!-- 사용자 지정 css -->
+    <style>
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 800px;
+        }
+
+        .form-control {
+            width: 350px;
+        }
+
+        .btn.btn-primary {
+            width: 350px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <h1 class="h3 mb-3 fw-normal"><a href="/"
+                style="text-decoration: none; color: black; text-align: center; display: block;">
+                TeamProject</a>
+            </h1><br>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" placeholder="이메일 아이디">
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호" autocomplete="off">
+            </div><br>
+            <button class="btn btn-primary">로그인</button><br>
+            <h6><a href="/signup">회원가입</a></h6>
+        </div>
+    </form>
+</body>
+
+</html>
