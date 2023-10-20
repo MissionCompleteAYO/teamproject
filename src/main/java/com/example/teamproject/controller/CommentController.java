@@ -22,13 +22,13 @@ public class CommentController {
     @Autowired
     HttpSession session;
 
-    @GetMapping("/comment")
-    @ResponseBody
-    public String comment(@ModelAttribute User user) {
-        Optional<User> dbUser = session.getAttribute("user_info");
-        commentRepository.findByUserId()
+    // @GetMapping("/comment")
+    // @ResponseBody
+    // public String comment(@ModelAttribute User user) {
+    //     Optional<User> dbUser = session.getAttribute("user_info");
+    //     commentRepository.findByUserId()
         
-    }
+    // }
     
     @GetMapping("/detail")
     public String detail() {
