@@ -11,7 +11,7 @@ public class CommentController {
     
     @GetMapping("/detail")
     public String detail() {
-        return "company/detail";
+        return "/company/detail";
     }
 
     @PostMapping("/detail")
