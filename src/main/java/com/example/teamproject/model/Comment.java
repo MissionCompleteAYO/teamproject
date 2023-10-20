@@ -14,16 +14,12 @@ public class Comment {
     @Id
     @GeneratedValue
     Long id;
-
-    String name;
     
     String comment;
     
-    Integer flavor;
+    Integer like;
     
-    Integer kind;
-    
-    Integer clean;
+    Integer unlike;
 
     Long reviewId;
 
