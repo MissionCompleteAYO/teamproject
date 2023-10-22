@@ -244,7 +244,23 @@
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/login">로그인</a>
+                <div>
+                  <div th:if="${session.user_info != null}">
+                    <p th:text="${session.user_info}"></p>
+                  </div>
+                  <div th:unless="${session.user_info != null }">
+                  </div>
+                  <div>
+                    <a th:if="${session.user_info == null}" th:href="@{/login}" 
+                    class=="nav-link active" aria-current="page" 
+                    style="text-decoration: none; color: white; font-weight: bold;">로그인</a>
+                    <a th:if="${session.user_info == null}" th:href="@{/signup}" 
+                    class=="nav-link active" aria-current="page" 
+                    style="text-decoration: none; color: white; font-weight: bold; margin-left: 10px;">회원가입</a>
+                    <a th:if="${session.user_info != null}" href="/logout" 
+                    class="nav-link active" aria-current="page">로그아웃</a>
+                  </div>
+                </div>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
