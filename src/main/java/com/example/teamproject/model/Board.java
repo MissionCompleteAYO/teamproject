@@ -22,11 +22,11 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
-    int costEffectiveness;
-    int quality;
-    int service;
-    int unique;
-    int waitingTime;
+    Integer costEffectiveness;
+    Integer quality;
+    Integer service;
+    Integer unique;
+    Integer waitingTime;
     String content;
     String userId;
     private Date registrationDateBoard;

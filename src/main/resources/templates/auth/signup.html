@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,7 +63,7 @@
             <input type="text" class="form-control" disabled="disabled" id="address_postcode" placeholder="우편번호"
                 style="width: 220px; display: inline-block;" required>
             <button type="button" class="btn btn-dark" onclick="address_execDaumPostcode()">우편번호 찾기</button>
-            <input type="text" class="form-control" id="address_address" placeholder="주소" required><br>
+            <input type="text" class="form-control" id="address_address" name="address" placeholder="주소" required><br>
             <input type="text" class="form-control" id="address_detailAddress" placeholder="상세주소" required>
             <!-- <input type="text" class="form-control" id="address_extraAddress" placeholder="참고항목"> -->
         </div>
@@ -114,33 +112,33 @@
         });
 
         // 비밀번호 유효성 검사, 입력한 두 비밀번호 일치확인
-        document.addEventListener("DOMContentLoaded", function () {
-            let formPw = document.getElementById("pw");
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     let formPw = document.getElementById("pw");
 
-            formPw.addEventListener("input", function () {
-                let userPw = formPw.value;
-                let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+        //     formPw.addEventListener("input", function () {
+        //         let userPw = formPw.value;
+        //         let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-                if (pwRegex.test(userPw)) {
-                    formPw.setCustomValidity("");
-                } else {
-                    formPw.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
-                }
-                checkDuplicatePw(userPw);
-                formPw.reportValidity();
-            });
+        //         if (pwRegex.test(userPw)) {
+        //             formPw.setCustomValidity("");
+        //         } else {
+        //             formPw.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
+        //         }
+        //         checkDuplicatePw(userPw);
+        //         formPw.reportValidity();
+        //     });
 
-            passwordConfirm.addEventListener("input", function () {
-                let pw = document.getElementById("pw").value;
-                let pwConfirm = document.getElementById("passwordConfirm").value
-                if (pw === pwConfirm) {
-                    passwordConfirm.setCustomValidity("");
-                } else {
-                    passwordConfirm.setCustomValidity("두 비밀번호가 일치하지 않습니다.");
-                }
-            });
+        //     passwordConfirm.addEventListener("input", function () {
+        //         let pw = document.getElementById("pw").value;
+        //         let pwConfirm = document.getElementById("passwordConfirm").value
+        //         if (pw === pwConfirm) {
+        //             passwordConfirm.setCustomValidity("");
+        //         } else {
+        //             passwordConfirm.setCustomValidity("두 비밀번호가 일치하지 않습니다.");
+        //         }
+        //     });
 
-        });
+        // });
 
         // 휴대폰 번호 유효성 검사-통과 -> 중복 검사
         document.addEventListener("DOMContentLoaded", function () {
@@ -237,4 +235,3 @@
 </body>
 
 </html>
->>>>>>> c168c64cb0dd42d28d1e5a6abed9c17f40c444c3

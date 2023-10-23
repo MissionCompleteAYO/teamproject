@@ -143,7 +143,7 @@
       <br><br>
       <form class="mb-3" name="myform" id="myform" method="post" action="/store/write">
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력해주세요" required>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력해주세요" name="title">
         </div>
         <br>
 
@@ -177,11 +177,11 @@
 
           <span class="font_size123">독특함</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="creativity" value="5" id="rate16"><label for="rate16" required>★</label>
-            <input type="radio" name="creativity" value="4" id="rate17"><label for="rate17">★</label>
-            <input type="radio" name="creativity" value="3" id="rate18"><label for="rate18">★</label>
-            <input type="radio" name="creativity" value="2" id="rate19"><label for="rate19">★</label>
-            <input type="radio" name="creativity" value="1" id="rate20"><label for="rate20">★</label>
+            <input type="radio" name="unique" value="5" id="rate16"><label for="rate16" required>★</label>
+            <input type="radio" name="unique" value="4" id="rate17"><label for="rate17">★</label>
+            <input type="radio" name="unique" value="3" id="rate18"><label for="rate18">★</label>
+            <input type="radio" name="unique" value="2" id="rate19"><label for="rate19">★</label>
+            <input type="radio" name="unique" value="1" id="rate20"><label for="rate20">★</label>
           </fieldset>
 
           <span class="font_size123">대기시간</span>
@@ -196,7 +196,7 @@
 
         <div class="mb-3">
           <br>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="이용하신 음식점에 대한 상세한 리뷰 부탁드립니다.         
+          <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="이용하신 음식점에 대한 상세한 리뷰 부탁드립니다.         
 
 별점 1개당 1점으로 하여 5점 만점으로 합니다.
 
