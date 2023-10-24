@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -19,9 +20,11 @@ public class Comment {
 
     Integer likeUnlike;
 
-    Long boardId;
+    @ManyToOne
+    Board board;
 
-    Long storeId;
+    @ManyToOne
+    Store store;
 
     LocalDateTime writeDateTime;
 

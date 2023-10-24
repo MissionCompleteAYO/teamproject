@@ -14,8 +14,11 @@ public class FileAttach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String originName;
+
     String savedName;
+
     @ManyToOne
     Board board;
 }

@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +46,17 @@ public class CommentController {
         List<Comment> commentList = commentRepository.findByBoardId(id);
         modelComment.addAttribute("commentList", commentList);
 
-        return "redirect:comment";
+        return "redirect:store/comment";
     }
 
     @GetMapping("/detail")
-    public String detail() {
+    public String detail(Model model) {
+
+        Sort sort = Sort.by(Order.asc("id"));
+        List<Board> list = boardRepository.findAll(sort);
+
+        model.addAttribute("list", list);
+
         return "/store/detail";
     }
 
