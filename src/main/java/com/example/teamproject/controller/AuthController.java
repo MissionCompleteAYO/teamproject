@@ -1,19 +1,28 @@
 package com.example.teamproject.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.teamproject.model.Feedback;
 import com.example.teamproject.model.User;
+import com.example.teamproject.repository.FeedbackRepository;
 import com.example.teamproject.repository.UserRepository;
 import com.example.teamproject.util.Encrypt;
 
@@ -31,15 +40,23 @@ public class AuthController {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    HttpServletResponse response;
+
+    @Autowired
+    FeedbackRepository feedbackRepository;
+
     @GetMapping("/login")
     public String login() {
         return "auth/login";
     }
 
+    @Transactional
     @PostMapping("/login")
     public String loginPost(
             @RequestParam("email") String email,
-            @RequestParam("pw") String pw) {
+            @RequestParam("pw") String pw,
+            Model model) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             String id = user.get().getEmail();
@@ -48,9 +65,13 @@ public class AuthController {
             if (id.equals(email) && isMach) {
                 session.setAttribute("user_info", email);
                 return "redirect:/";
+            } else {
+                model.addAttribute("error", "회원님이 입력한 정보가 올바르지 않습니다.");
             }
+        } else {
+            model.addAttribute("error", "이메일 아이디가 존재하지 않습니다.");
         }
-        return "/auth/login";
+        return "auth/login";
     }
 
     @GetMapping("/logout")
@@ -128,12 +149,97 @@ public class AuthController {
         }
         return result;
     };
-}
 
-// 회원탈퇴
-// @GetMapping("/exit")
-// public String exit() {
-// User user = (User) session.getAttribute("user_info");
-// userRepository.delete(user);
-// return "redirect:/";
-// }
+    @GetMapping("/manage")
+    public String manage() {
+        return "auth/manage";
+    }
+
+    @GetMapping("/manage/changeMyInfo")
+    public String changeMyInfo() {
+        if (session.getAttribute("user_info") != null) {
+            return "auth/changeMyInfo";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @Transactional
+    @PostMapping("/manage/changeMyInfo")
+    @ResponseBody
+    public String changeMyInfoPost(
+            @ModelAttribute User user) {
+        String userEmailId = (String) session.getAttribute("user_info");
+        String encodePw = passwordEncoder.encode(user.getPw());
+        if (user != null && user.getEmail().equals(userEmailId)) {
+            User userInfo = new User();
+            userInfo.setEmail(user.getEmail());
+            userInfo.setPw(encodePw);
+            userInfo.setPhoneNum(user.getPhoneNum());
+            userInfo.setAddress(user.getAddress());
+            userRepository.save(user);
+            return "redirect:/manage";
+        } else {
+            return "auth/changeMyInfo";
+        }
+    }
+
+    @PostMapping("/pwCheck")
+    @ResponseBody
+    public Map<String, Object> pwCheckPost(
+            @ModelAttribute User user) {
+        Map<String, Object> map = new HashMap<>();
+
+        String userInfo = (String) session.getAttribute("user_info");
+        Optional<User> emailDb = userRepository.findByEmail(userInfo);
+        if (emailDb.isPresent() && passwordEncoder.matches(user.getPw(), emailDb.get().getPw())) {
+            map.put("result", true);
+        } else {
+            map.put("result", false);
+            map.put("msg", "입력하신 비밀번호가 올바르지 않습니다.");
+        }
+        return map;
+    }
+
+    @GetMapping("/manage/deleteMyAccount")
+    public String deleteMyAccount(
+            @ModelAttribute User user) {
+        if (session.getAttribute("user_info") != null) {
+            return "auth/deleteMyAccount";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/manage/deleteMyAccount")
+    @ResponseBody
+    public Map<String, Object> deleteMyAccountPost(
+            @ModelAttribute User user,
+            @RequestParam("cancelReason") String cancelReason
+            ) {
+        Map<String, Object> map = new HashMap<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse("2023-10-24 19:46:09", formatter);
+
+        String loggedUser = (String) session.getAttribute("user_info");
+        Optional<User> userDb = userRepository.findByEmail(loggedUser);
+        if (userDb.isPresent()) {
+            Feedback feedback = new Feedback();
+            feedback.setCancelDate(dateTime);
+            feedback.setCancelReason(cancelReason);
+            feedbackRepository.save(feedback);
+            System.out.println(feedback);
+            System.out.println(feedbackRepository);
+
+            userRepository.delete(userDb.get());
+            session.invalidate();
+            map.put("result", true);
+            map.put("msg", "남겨주신 사유에 대해 적극 개선하겠습니다. 그동안 이용해 주셔서 감사합니다!");
+        } else {
+            map.put("result", false);
+        }
+
+        return map;
+    }
+}

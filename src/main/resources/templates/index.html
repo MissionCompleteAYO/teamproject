@@ -231,8 +231,12 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="">TeamProject</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark"
-          aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+          aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation" style="border: none; box-shadow: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list-ul"
+            viewBox="0 0 16 16" style="color: white;">
+            <path fill-rule="evenodd"
+              d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+          </svg>
         </button>
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbarDark"
           aria-labelledby="offcanvasNavbarDarkLabel">
@@ -246,19 +250,21 @@
               <li class="nav-item">
                 <div>
                   <div th:if="${session.user_info != null}">
+                    <svg id="edit-profile-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                      class="bi bi-person-fill mb-2" viewBox="0 0 16 16" style="cursor: pointer;">
+                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                    </svg>
                     <p th:text="${session.user_info}"></p>
+
                   </div>
                   <div th:unless="${session.user_info != null }">
                   </div>
                   <div>
-                    <a th:if="${session.user_info == null}" th:href="@{/login}" 
-                    class=="nav-link active" aria-current="page" 
-                    style="text-decoration: none; color: white; font-weight: bold;">로그인</a>
-                    <a th:if="${session.user_info == null}" th:href="@{/signup}" 
-                    class=="nav-link active" aria-current="page" 
-                    style="text-decoration: none; color: white; font-weight: bold; margin-left: 10px;">회원가입</a>
-                    <a th:if="${session.user_info != null}" href="/logout" 
-                    class="nav-link active" aria-current="page">로그아웃</a>
+                    <a th:if="${session.user_info == null}" th:href="@{/login}" class=="nav-link active"
+                      aria-current="page" style="text-decoration: none; color: white; font-weight: bold;">로그인</a>
+                    <a th:if="${session.user_info == null}" th:href="@{/signup}" class=="nav-link active"
+                      aria-current="page"
+                      style="text-decoration: none; color: white; font-weight: bold; margin-left: 10px;">회원가입</a>
                   </div>
                 </div>
               </li>
@@ -278,6 +284,10 @@
                   </li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
+              </li>
+              <li class="nav-item">
+                <a th:if="${session.user_info != null}" href="/logout" class="nav-link active"
+                  aria-current="page">로그아웃</a>
               </li>
             </ul>
             <form class="d-flex mt-3" role="search">
@@ -467,15 +477,22 @@
         autoplayTimeout: 3000,
         autoplayHoverPause: true
       });
-
     </script>
-
     <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-      </script>
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-      </script>
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        let editProfile = document.getElementById("edit-profile-icon")
+        editProfile.addEventListener("click", function() {
+          location.href = '/manage';
+        })
+        
+      });
+    </script>
 
 </body>
 

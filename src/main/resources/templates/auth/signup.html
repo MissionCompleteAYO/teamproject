@@ -63,7 +63,7 @@
             <input type="text" class="form-control" disabled="disabled" id="address_postcode" placeholder="우편번호"
                 style="width: 220px; display: inline-block;" required>
             <button type="button" class="btn btn-dark" onclick="address_execDaumPostcode()">우편번호 찾기</button>
-            <input type="text" class="form-control" id="address_address" placeholder="주소" required><br>
+            <input type="text" class="form-control" id="address_address" name="address" placeholder="주소" required><br>
             <input type="text" class="form-control" id="address_detailAddress" placeholder="상세주소" required>
             <!-- <input type="text" class="form-control" id="address_extraAddress" placeholder="참고항목"> -->
         </div>
@@ -101,8 +101,9 @@
             });
 
             async function checkDuplicateId(userEmail) {
-                let email = document.getElementById("email").value
-                const data = await fetch("/emailCheck?email=" + email);
+                let email = document.getElementById("email").value;
+                const data = 
+                 fetch("/emailCheck?email=" + email);
                 const res = await data.text();
 
                 if (res === "유효하지 않은 이메일입니다.") {
@@ -156,7 +157,7 @@
 
             async function checkDuplicatePhoneNum(userPhoneNum) {
                 const data = await fetch("/phoneNumCheck/phoneNum" + phoneNum)
-                const res = data.text();
+                const res = await data.text();
                 if (res === "휴대폰 번호를 다시 확인해주세요.") {
                     formPhoneNum.setCustomValidity("사용불가");
                 }
