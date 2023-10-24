@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>회원가입</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
+        integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <style>
+        form.validation-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .form-control {
+            width: 350px;
+        }
+
+        .btn.btn-primary {
+            width: 350px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="/signup" class="validation-form" method="post" novalidate>
+        <h1 class="h3 mb-3 fw-normal"><a href="/"
+                style="text-decoration: none; color: black; text-align: center; display: block;">
+                TeamProject</a>
+        </h1><br>
+        <div class="form-group has-success">
+            <label class="form-label mt-2" for="name">이름 *</label>
+            <input type="text" class="form-control is-vald" id="name" name="name" required>
+            <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-group has-danger">
+            <label class="form-label mt-1" for="email">이메일 *</label>
+            <input type="email" class="form-control is-invaid" id="email" name="email" required>
+            <div class="invalid-feedback">올바른 이메일 형식을 입력해주세요.</div>
+        </div>
+        <div class="form-group has-danger">
+            <label class="form-label mt-1" for="pw">비밀번호 *</label>
+            <input type="password" class="form-control is-invlid" id="pw" name="pw" required>
+            <div class="invalid-feedback">비밀번호가 올바르지 않습니다.</div>
+        </div>
+        <div class="form-group has-success">
+            <label class="form-label mt-1" for="passwordConfirm">비밀번호 확인 *</label>
+            <input type="password" class="form-control is-vlid" id="passwordConfirm" name="passwordConfirm" required>
+            <div class="invalid-feedback">입력한 두 비밀번호가 일치하지 않습니다.</div>
+        </div>
+        <div class="form-group has-danger">
+            <label class="form-label mt-1" for="phoneNum">핸드폰 번호 *</label>
+            <input type="number" class="form-control is-invaid" id="phoneNum" name="phoneNum" required>
+            <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-group has-danger">
+            <label class="form-label mt-1" for="address">주소 *</label>
+            <input type="" class="form-control is-invaid" id="address" name="address" required>
+            <div class="invalid-feedback"></div>
+        </div>
+        <button class="btn btn-primary mt-2" type="submit">가입완료</button>
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let name = document.getElementById("name")
+            name.addEventListener("input", function () {
+                let userName = name.value();
+                let nameRegex = 
+            })
+
+        })
+
+        //아이디 유효성 검사 -통과-> 중복 검사
+        document.addEventListener("DOMContentLoaded", function () {
+            let formId = document.getElementById("id");
+
+            formId.addEventListener("input", function () {
+                let userId = formId.value;
+                let idRegex = /^[a-zA-Z가-힣][a-zA-Z가-힣0-9_-]{4,19}$/;
+
+                if (idRegex.test(userId)) {
+                    formId.setCustomValidity("");
+                } else {
+                    formId.setCustomValidity(
+                        "formId.reportValidity();부여하지 않으면 오류 메세지 반환 X");
+                }
+                checkDuplicateId(userId);
+            });
+
+            async function checkDuplicateId(userId) {
+                let id = document.getElementById("id").value
+                const data = await fetch("/idCheck?id=" + id);
+                const res = await data.text();
+
+                if (res === "아이디가 이미 존재합니다." && "유효하지 않은 아이디입니다.") {
+                    formId.setCustomValidity("사용 불가");
+                }
+            }
+        });
+
+
+        //이메일 유효성 검사 -통과-> 중복 검사
+        document.addEventListener("DOMContentLoaded", function () {
+            let formEmail = document.getElementById("email");
+
+            formEmail.addEventListener("input", function () {
+                let userEmail = formEmail.value;
+                let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{3})$/;
+
+                if (emailRegex.test(userEmail)) {
+                    formEmail.setCustomValidity("");
+                } else {
+                    formEmail.setCustomValidity("X")
+                }
+                checkDuplicateEmail(userEmail);
+            });
+
+            async function checkDuplicateEmail(userEmail) {
+                let email = document.getElementById("email").value;
+                const data = await fetch("/emailCheck?email=" + encodeURIComponent(email));
+                const res = await data.text();
+
+                if (res === "사용중인 이메일 입니다." && "유효하지 않은 이메일입니다.") {
+                    formEmail.setCustomValidity("사용 불가");
+                }
+            }
+        });
+
+
+        //비밀번호 유효성 검사, 입력한 두 비밀번호 일치확인
+        document.addEventListener("DOMContentLoaded", function () {
+            let formPw = document.getElementById("pw");
+
+            formPw.addEventListener("input", function () {
+                let userPw = formPw.value;
+                let pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+                if (pwRegex.test(userPw)) {
+                    formPw.setCustomValidity("");
+                } else {
+                    formPw.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
+                }
+                checkDuplicatePw(userPw);
+                formPw.reportValidity();
+            });
+
+            passwordConfirm.addEventListener("input", function () {
+                let pw = document.getElementById("pw").value;
+                let pwConfirm = document.getElementById("passwordConfirm").value
+                if (pw === pwConfirm) {
+                    passwordConfirm.setCustomValidity("");
+                } else {
+                    passwordConfirm.setCustomValidity("X");
+                }
+            });
+
+        });
+
+        //로딩 시 
+        window.addEventListener('load', () => {
+            const forms = document.getElementsByClassName('validation-form');
+
+            Array.prototype.filter.call(forms, (form) => {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    </script>
+
+</body>
+
+</html>
