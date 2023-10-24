@@ -1,7 +1,5 @@
 package com.example.teamproject.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,19 +8,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Comment {
+public class Store {
     @Id
     @GeneratedValue
     Long id;
 
-    String comment;
+    String storeName;
 
-    Integer likeUnlike;
+    String storePicture;
 
-    Long boardId;
-
-    Long storeId;
-
-    LocalDateTime writeDateTime;
-
+    String storeCatchPhrase;
 }

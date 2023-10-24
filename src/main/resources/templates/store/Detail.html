@@ -21,7 +21,9 @@
                                 <h2>음식점 이름</h2>
                                 <br />
                                 <div class="row row-cols-4">
-                                    <div class="col">Column</div>
+                                    <div class="col">
+                                        <img src="" alt="image">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -37,23 +39,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="board : ${list}">
+                                    <tr th:each="board : ${list}" th:attr="id=${board.id}">
                                         <th
-                                            th:text="${board.title}"
                                             scope="row"
                                             colspan="3"
                                         >
                                             <a
-                                                th:href="@{/store/comment/}"
+                                                th:href="@{/store/comment/{id}=${board.id}}"
                                                 style="text-decoration: none"
-                                                >ooo 최고!!!</a
+                                                >[[${board.title}]]</a
                                             >
                                         </th>
                                         <td th:text="${user.name}"></td>
                                         <td
-                                            th:text="${board.writeDatetime}"
-                                        ></td>
-                                        //Board.java에 작성일시 Entity 필요
+                                            th:text="${board.name}"
+                                        >Board.java에 작성일시 Entity 필요</td>
+                                        
                                     </tr>
                                 </tbody>
                             </table>
