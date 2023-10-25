@@ -7,9 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "board")
 public class FileAttach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +23,8 @@ public class FileAttach {
 
     @ManyToOne
     Board board;
+
     String imageUrl;
+
+    String filePath;
 }

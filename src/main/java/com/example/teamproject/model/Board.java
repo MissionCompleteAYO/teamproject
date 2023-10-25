@@ -17,9 +17,11 @@ import javax.persistence.PrePersist;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "user")
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

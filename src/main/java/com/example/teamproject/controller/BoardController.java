@@ -1,7 +1,12 @@
 package com.example.teamproject.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -53,6 +58,9 @@ public class BoardController {
     @PostMapping("/write")
     public String writePost(@ModelAttribute Board board,
             @RequestParam(value = "originName", required = false) List<MultipartFile> mFiles) {
+                System.out.println(board);
+                System.out.println(mFiles);
+
         String loggedUser = (String) session.getAttribute("user_info");
 
         if (loggedUser == null || loggedUser.isEmpty()) {
@@ -78,12 +86,25 @@ public class BoardController {
             for (int i = 0; i < mFiles.size(); i++) {
                 MultipartFile mFile = mFiles.get(i);
                 if (!mFile.isEmpty()) {
-                    String originalFileName = mFile.getOriginalFilename();
-                    FileAttach fileAttach = new FileAttach();
-                    fileAttach.setOriginName(originalFileName);
-                    fileAttach.setSavedName(originalFileName);
-                    fileAttach.setBoard(board);
-                    fileAttachRepository.save(fileAttach);
+                    try {
+                        String originalFileName = mFile.getOriginalFilename();
+                        byte[] fileBytes = mFile.getBytes();
+
+                        String storagePath = "/storageImage";
+                        Path filePath = Paths.get(storagePath, originalFileName);
+                        Files.write(filePath, fileBytes);
+
+                        FileAttach fileAttach = new FileAttach();
+                        fileAttach.setOriginName(originalFileName);
+                        String savedFileName = UUID.randomUUID().toString();
+                        fileAttach.setSavedName(savedFileName);
+                        fileAttach.setFilePath(filePath.toString());
+                        fileAttach.setBoard(board);
+                        fileAttachRepository.save(fileAttach);
+                    } catch (IOException e) {
+                        return "redirect:/store/write";
+                    }
+
                 }
             }
         }

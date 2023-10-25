@@ -8,15 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "board")
 public class Comment {
     @Id
     @GeneratedValue
     Long id;
 
-    String comment;
+    String content;
 
     Integer likeUnlike;
 

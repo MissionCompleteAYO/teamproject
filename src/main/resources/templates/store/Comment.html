@@ -16,43 +16,45 @@
             <div class="p-5 text-center bg-body-tertiary rounded-3">
                 <div class="container row gx-5">
                     <div class="container col-6">
-                        <div class="row row-cols-4">
+                        <div th:each="fileAttach : ${fileList}" th:attr="id=${fileAttach.id}" class="row row-cols-4">
                             <div class="col">
-                                <img src="" alt="image">
+                                <img th:src="${fileAttach.filePath}" alt="image">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="container col-6">
-                    <div class="row">
-                        <div class="col-10">
-                            <input type="text" id="comment" name="comment" class="form-control"
-                                placeholder="이 리뷰를 평가해 줘!!" />
+                        <div>
+                            <p th:text="'글번호 : ' + ${board.id} + '번'"></p>
+                            <p th:text="'제목 : ' + ${board.title}"></p>
+                            <p th:text="'작성자 : ' + ${board.user.name}"></p>
+                            <p th:text="'작성내용 : ' + ${board.content}"></p>
+                            <p th:text="'작성일시 : ' + ${board.registrationDateBoard}"></p>
                         </div>
-
-                        <button class="btn col-1" type="button" id="like" onclick="like()">
-                            <img src="/Detail/thumb-up-32.png" alt="이미지" />
-                        </button>
-
-                        <button class="btn col-1 text-center" type="button" id="unlike" onclick="unlike()">
-                            <img src="/Detail/thumb-down-32.png" style="object-fit: cover" alt="이미지" />
-                        </button>
                     </div>
-                    <div>
-                        <p id="commentResult"></p>
+                    <div class="container col-6">
+                        <div class="row">
+                            <div class="col-10">
+                                <input type="text" id="comment" name="comment" class="form-control"
+                                    placeholder="이 리뷰를 평가해 줘!!" />
+                            </div>
+    
+                            <button class="btn col-1" type="button" id="like" onclick="like()">
+                                <img src="/Detail/thumb-up-32.png" alt="이미지" />
+                            </button>
+    
+                            <button class="btn col-1 text-center" type="button" id="unlike" onclick="unlike()">
+                                <img src="/Detail/thumb-down-32.png" style="object-fit: cover" alt="이미지" />
+                            </button>
+                        </div>
+                        <div>
+                            <table class="table">
+                                    <tr th:each="comment : ${commentList}" th:attr="id=${comment.id}">
+                                        <td th:text="${comment.content}" scope="row" colspan="3"></td>
+                                        <td th:text="${comment.user.name}"></td>
+                                        <td th:text="${comment.writeDateTime}"></td>
+                                    </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                </div>                
             </div>
         </div>
     </div>

@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.teamproject.model.Board;
 import com.example.teamproject.model.Comment;
+import com.example.teamproject.model.FileAttach;
 import com.example.teamproject.model.User;
 import com.example.teamproject.repository.BoardRepository;
 import com.example.teamproject.repository.CommentRepository;
+import com.example.teamproject.repository.FileAttachRepository;
 
 @Controller
 @RequestMapping("/store")
@@ -34,19 +36,29 @@ public class CommentController {
     CommentRepository commentRepository;
 
     @Autowired
+    FileAttachRepository fileAttachRepository;
+
+    @Autowired
     HttpSession session;
 
-    @GetMapping("/comment")
-    @ResponseBody
-    public String comment(Model modelBoard, Model modelComment, @PathVariable("id") Long id) {
+    @GetMapping("/comment/{id}")
+    public String comment(Model modelBoard, Model modelComment, Model modelFile, @PathVariable("id") Long id) {
         Optional<Board> boardData = boardRepository.findById(id);
         Board board = boardData.get();
         modelBoard.addAttribute("board", board);
+        System.out.println(modelBoard);
+        
 
         List<Comment> commentList = commentRepository.findByBoardId(id);
         modelComment.addAttribute("commentList", commentList);
+        System.out.println(modelComment);
 
-        return "redirect:store/comment";
+        List<FileAttach> fileList = fileAttachRepository.findByBoardId(id);
+        modelFile.addAttribute("fileList", fileList);
+        System.out.println(modelFile);
+
+
+        return "store/comment";
     }
 
     @GetMapping("/detail")

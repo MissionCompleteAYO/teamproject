@@ -18,13 +18,14 @@
                     <div class="container col-6">
                         <div>
                             <div class="container text-center">
-                                <h2>[[${board.store.name}]]</h2>
+                                <h2>음식점 이름</h2>
                                 <br />
                                 <div class="row row-cols-4">
                                     <div class="col">
                                         <img src="" alt="image" />
                                     </div>
                                 </div>
+                                <div>지도</div>
                             </div>
                         </div>
                     </div>
@@ -45,7 +46,7 @@
                                     >
                                         <th scope="row" colspan="3">
                                             <a
-                                                th:href="@{/store/comment/{id}=${board.id}}"
+                                                th:href="@{/store/comment/{id}(id=${board.id})}"
                                                 style="text-decoration: none"
                                                 >[[${board.title}]]</a
                                             >

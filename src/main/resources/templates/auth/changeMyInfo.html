@@ -1,108 +1,187 @@
-<!DOCTYPE html>123
+<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <title>개인정보 변경</title>
 
-<head>
-    <title>개인정보 변경</title>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
+            integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG"
+            crossorigin="anonymous"
+        />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
-        integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
-
-    <!-- 사용자 지정 css -->
-    <style>
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 800px;
-        }
-
-        .form-control {
-            width: 350px;
-        }
-
-        .btn.btn-primary {
-            width: 350px;
-        }
-    </style>
-</head>
-
-<body>
-    <form id="check-pw-form">
-        <div class="form-group">
-            <title>개인정보변경_비밀번호 확인</title>
-            <h1 class="h3 mb-4 fw-normal"
-                style="text-decoration: none; color: black; text-align: center; display: block; width: 600px;">
-                개인정보변경
-                <hr style="border: 1px solid black;">
-            </h1>
-            <span class="mb-4 fw-normal" style="text-align: center; color: black; word-spacing: 1px;">고객님의 개인정보 보호를 위해
-                본인확인을 진행합니다.<br>
-                <span style="font-weight: bold;">비밀번호</span>를 입력해주세요.
-            </span><br>
-            <div class="form-floating"
-                style="border: 1px solid #ccc; padding: 20px; width: 600px; display: flex; flex-direction: column; align-items: center;">
-                <input type="password" class="form-control mt-3" id="pw" name="pw" placeholder="비밀번호"
-                    autocomplete="off" onkeypress="ignore_enter(event)"><br>
-                <button id="check-btn" type="button" class="btn btn-primary">비밀번호 확인</button><br>
-            </div>
-        </div>
-    </form>
-
-    <form id="change-form" action="/manage/changeMyInfo" method="post" style="display: none;">
-        <div class="form-group">
-            <title>개인정보변경_양식 화면</title>
-            <h1 class="h3 mb-4 fw-normal"
-                style="text-decoration: none; color: black; text-align: center; display: block; width: 600px;">
-                개인정보변경
-                <hr style="border: 1px solid black;">
-            </h1>
-            <div class="form-floating"
-                style="border: 1px solid #ccc; padding: 20px; width: 600px; display: flex; flex-direction: column; align-items: center;">
-                <input type="email" class="form-control" id="email" name="email" placeholder="이메일 아이디">
-                <input type="password" class="form-control mt-3" id="pw" name="pw" placeholder="비밀번호"
-                    autocomplete="off">
-                <input type="number" class="form-control" id="phoneNum" name="phoneNum" placeholder="휴대폰 번호">
-                <br>
-                <button type="button" class="btn btn-primary">개인정보변경 확인</button><br>
-            </div>
-        </div>
-    </form>
-
-    <script>
-        function ignore_enter(e) {
-            const key = e.key;
-            if(key === 'Enter') {
-                e.preventDefault();
-                document.getElementById("check-btn").click();
+        <!-- 사용자 지정 css -->
+        <style>
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 800px;
             }
-        }
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("check-btn").addEventListener('click', async function () {
-                const pw = document.querySelector('#pw').value;
-                const formData = new FormData();
-                formData.append("pw", pw);
-                const data = await fetch("/pwCheck", {
-                    method: 'post',
-                    body: formData
-                });
-                const res = await data.json();
-                if (res.result == true) {
-                    show();
-                } else {
-                    alert(res.msg);
+
+            .form-control {
+                width: 350px;
+            }
+
+            .btn.btn-primary {
+                width: 350px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form id="check-pw-form">
+            <div class="form-group">
+                <title>개인정보변경_비밀번호 확인</title>
+                <h1
+                    class="h3 mb-4 fw-normal"
+                    style="
+                        text-decoration: none;
+                        color: black;
+                        text-align: center;
+                        display: block;
+                        width: 600px;
+                    "
+                >
+                    개인정보변경
+                    <hr style="border: 1px solid black" />
+                </h1>
+                <span
+                    class="mb-4 fw-normal"
+                    style="text-align: center; color: black; word-spacing: 1px"
+                    >고객님의 개인정보 보호를 위해 본인확인을 진행합니다.<br />
+                    <span style="font-weight: bold">비밀번호</span>를
+                    입력해주세요. </span
+                ><br />
+                <div
+                    class="form-floating"
+                    style="
+                        border: 1px solid #ccc;
+                        padding: 20px;
+                        width: 600px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    "
+                >
+                    <input
+                        type="password"
+                        class="form-control mt-3"
+                        id="pw"
+                        name="pw"
+                        placeholder="비밀번호"
+                        autocomplete="off"
+                        onkeypress="ignore_enter(event)"
+                    /><br />
+                    <button
+                        id="check-btn"
+                        type="button"
+                        class="btn btn-primary"
+                    >
+                        비밀번호 확인</button
+                    ><br />
+                </div>
+            </div>
+        </form>
+
+        <form
+            id="change-form"
+            action="/manage/changeMyInfo"
+            method="post"
+            style="display: none"
+        >
+            <div class="form-group">
+                <title>개인정보변경_양식 화면</title>
+                <h1
+                    class="h3 mb-4 fw-normal"
+                    style="
+                        text-decoration: none;
+                        color: black;
+                        text-align: center;
+                        display: block;
+                        width: 600px;
+                    "
+                >
+                    개인정보변경
+                    <hr style="border: 1px solid black" />
+                </h1>
+                <div
+                    class="form-floating"
+                    style="
+                        border: 1px solid #ccc;
+                        padding: 20px;
+                        width: 600px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    "
+                >
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="이메일 아이디"
+                    />
+                    <input
+                        type="password"
+                        class="form-control mt-3"
+                        id="pw"
+                        name="pw"
+                        placeholder="비밀번호"
+                        autocomplete="off"
+                    />
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="phoneNum"
+                        name="phoneNum"
+                        placeholder="휴대폰 번호"
+                    />
+                    <br />
+                    <button type="button" class="btn btn-primary">
+                        개인정보변경 확인</button
+                    ><br />
+                </div>
+            </div>
+        </form>
+
+        <script>
+            function ignore_enter(e) {
+                const key = e.key;
+                if (key === "Enter") {
+                    e.preventDefault();
+                    document.getElementById("check-btn").click();
                 }
-            })
-        });
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                document
+                    .getElementById("check-btn")
+                    .addEventListener("click", async function () {
+                        const pw = document.querySelector("#pw").value;
+                        const formData = new FormData();
+                        formData.append("pw", pw);
+                        const data = await fetch("/pwCheck", {
+                            method: "post",
+                            body: formData,
+                        });
+                        const res = await data.json();
+                        if (res.result == true) {
+                            show();
+                        } else {
+                            alert(res.msg);
+                        }
+                    });
+            });
 
-        function show() {
-            const checkPwForm = document.getElementById("check-pw-form")
-            checkPwForm.style.display = 'none';
-            const changeForm = document.getElementById("change-form")
-            changeForm.style.display = 'block';
-        }
-    </script>
-</body>
-
+            function show() {
+                const checkPwForm = document.getElementById("check-pw-form");
+                checkPwForm.style.display = "none";
+                const changeForm = document.getElementById("change-form");
+                changeForm.style.display = "block";
+            }
+        </script>
+    </body>
 </html>
