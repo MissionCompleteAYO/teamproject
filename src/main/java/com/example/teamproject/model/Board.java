@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+
 import lombok.Data;
 
 @Entity
@@ -33,6 +35,9 @@ public class Board {
     @ManyToOne
     User user;
     private Date registrationDateBoard;
+
+    @ManyToOne
+    Store store;
 
     @PrePersist
     protected void onCreate() {

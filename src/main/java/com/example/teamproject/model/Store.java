@@ -13,9 +13,6 @@ public class Store {
     @GeneratedValue
     Long id;
 
-    String storeName;
+    String name;
 
-    String storePicture;
-
-    String storeCatchPhrase;
 }

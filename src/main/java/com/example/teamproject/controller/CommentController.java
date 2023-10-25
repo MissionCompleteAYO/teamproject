@@ -1,9 +1,6 @@
 package com.example.teamproject.controller;
 
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> 5cca6cc2413f74337c983ee997d52c56c49417bb
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -20,14 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-<<<<<<< HEAD
 import com.example.teamproject.model.Board;
 import com.example.teamproject.model.Comment;
 import com.example.teamproject.model.User;
 import com.example.teamproject.repository.BoardRepository;
-=======
-import com.example.teamproject.model.User;
->>>>>>> 5cca6cc2413f74337c983ee997d52c56c49417bb
 import com.example.teamproject.repository.CommentRepository;
 
 @Controller
