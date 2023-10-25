@@ -215,18 +215,19 @@ public class AuthController {
     @ResponseBody
     public Map<String, Object> deleteMyAccountPost(
             @ModelAttribute User user,
-            @RequestParam("cancelReason") String cancelReason
-            ) {
+            @RequestParam("cancelReason") String cancelReason) {
         Map<String, Object> map = new HashMap<>();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse("2023-10-24 19:46:09", formatter);
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm:ss");
+        String formattedDate = time.format(formatter);
+        LocalDateTime parsDateTime = LocalDateTime.parse(formattedDate, formatter);
 
         String loggedUser = (String) session.getAttribute("user_info");
         Optional<User> userDb = userRepository.findByEmail(loggedUser);
         if (userDb.isPresent()) {
             Feedback feedback = new Feedback();
-            feedback.setCancelDate(dateTime);
+            feedback.setCancelDate(parsDateTime);
             feedback.setCancelReason(cancelReason);
             feedbackRepository.save(feedback);
             System.out.println(feedback);
@@ -242,4 +243,4 @@ public class AuthController {
 
         return map;
     }
-}
+}123
