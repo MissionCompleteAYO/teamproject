@@ -18,4 +18,5 @@ public class FileAttach {
     String savedName;
     @ManyToOne
     Board board;
+    String imageUrl;
 }

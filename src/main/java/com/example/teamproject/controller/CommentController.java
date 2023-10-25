@@ -1,5 +1,7 @@
 package com.example.teamproject.controller;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.teamproject.model.User;
 import com.example.teamproject.repository.CommentRepository;
 
 @Controller
@@ -25,9 +28,9 @@ public class CommentController {
     @GetMapping("/comment")
     @ResponseBody
     public String comment(@ModelAttribute User user) {
-        Optional<User> dbUser = session.getAttribute("user_info");
-        commentRepository.findByUserId()
-        
+        User dbUser = (User) session.getAttribute("user_info");
+        // commentRepository.findByUserId();
+        return "";
     }
     
     @GetMapping("/detail")

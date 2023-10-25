@@ -2,32 +2,15 @@
 <html lang="ko" data-bs-theme="auto">
 
 <head>
-  <script src="/docs/5.3/assets/js/color-modes.js"></script>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
-  <meta name="generator" content="Hugo 0.115.4">
-  <title>Jumbotrons · Bootstrap v5.3</title>
 
-  <link rel="canonical" href="https://getbootstrap.kr/docs/5.3/examples/jumbotrons/">
+  <title>TEAM_PROJECT</title>
+
   <link href="/assets/css/star.css" rel="stylesheet" />
-
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <!-- Favicons -->
-  <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-  <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
-  <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
-  <meta name="theme-color" content="#712cf9">
-
 
   <style>
     .bd-placeholder-img {
@@ -159,68 +142,73 @@
     <div class="p-5 text-center bg-body-tertiary rounded-3">
       <h1>Review Creation Page</h1>
       <br><br>
-      <form class="mb-3" name="myform" id="myform" method="post" action="/store/write">
+      <form class="mb-3" name="myform" id="myform" method="post" action="/store/write" enctype="multipart/form-data">
         <div class="mb-3">
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력해주세요">
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력해주세요" name="title">
         </div>
         <br>
 
         <div class="rating-container">
           <span class="font_size123">가성비</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
-            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
-            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
-            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+            <input type="radio" name="costEffectiveness" value="5" id="rate1" required><label for="rate1">★</label>
+            <input type="radio" name="costEffectiveness" value="4" id="rate2"><label for="rate2">★</label>
+            <input type="radio" name="costEffectiveness" value="3" id="rate3"><label for="rate3">★</label>
+            <input type="radio" name="costEffectiveness" value="2" id="rate4"><label for="rate4">★</label>
+            <input type="radio" name="costEffectiveness" value="1" id="rate5"><label for="rate5">★</label>
           </fieldset>
 
-          <span class="font_size123">음식의 질</span>
+          <span class="font_size123">맛/위생</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
-            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
-            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
-            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+            <input type="radio" name="quality" value="5" id="rate6" required><label for="rate6">★</label>
+            <input type="radio" name="quality" value="4" id="rate7"><label for="rate7">★</label>
+            <input type="radio" name="quality" value="3" id="rate8"><label for="rate8">★</label>
+            <input type="radio" name="quality" value="2" id="rate9"><label for="rate9">★</label>
+            <input type="radio" name="quality" value="1" id="rate10"><label for="rate10">★</label>
           </fieldset>
 
           <span class="font_size123">서비스</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
-            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
-            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
-            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+            <input type="radio" name="service" value="5" id="rate11" required><label for="rate11">★</label>
+            <input type="radio" name="service" value="4" id="rate12"><label for="rate12">★</label>
+            <input type="radio" name="service" value="3" id="rate13"><label for="rate13">★</label>
+            <input type="radio" name="service" value="2" id="rate14"><label for="rate14">★</label>
+            <input type="radio" name="service" value="1" id="rate15"><label for="rate15">★</label>
           </fieldset>
 
-          <span class="font_size123">창의성</span>
+          <span class="font_size123">독특함</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
-            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
-            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
-            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+            <input type="radio" name="unique" value="5" id="rate16" required><label for="rate16">★</label>
+            <input type="radio" name="unique" value="4" id="rate17"><label for="rate17">★</label>
+            <input type="radio" name="unique" value="3" id="rate18"><label for="rate18">★</label>
+            <input type="radio" name="unique" value="2" id="rate19"><label for="rate19">★</label>
+            <input type="radio" name="unique" value="1" id="rate20"><label for="rate20">★</label>
           </fieldset>
 
           <span class="font_size123">대기시간</span>
           <fieldset class="fieldset-margin">
-            <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-            <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
-            <input type="radio" name="reviewStar" value="3" id="rate3"><label for="rate3">★</label>
-            <input type="radio" name="reviewStar" value="2" id="rate4"><label for="rate4">★</label>
-            <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
+            <input type="radio" name="waitingTime" value="5" id="rate21" required><label for="rate21">★</label>
+            <input type="radio" name="waitingTime" value="4" id="rate22"><label for="rate22">★</label>
+            <input type="radio" name="waitingTime" value="3" id="rate23"><label for="rate23">★</label>
+            <input type="radio" name="waitingTime" value="2" id="rate24"><label for="rate24">★</label>
+            <input type="radio" name="waitingTime" value="1" id="rate25"><label for="rate25">★</label>
           </fieldset>
         </div>
 
         <div class="mb-3">
           <br>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
-            placeholder="이용하신 음식점에 대한 상세한 리뷰 부탁드립니다"></textarea>
+          <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="이용하신 음식점에 대한 상세한 리뷰 부탁드립니다.         
+
+별점 1개당 1점으로 하여 5점 만점으로 합니다.
+
+또한, 대기시간이 짧다고 느낄수록 높은 점수(별 5개)로 입력해 주세요.
+
+한번 작성한 글은 삭제 할 수 없으니 수정페이지에서 변경해 주시기 바랍니다." required></textarea>
         </div>
 
         <div class="mb-3">
           <br>
-          <input class="form-control" type="file" id="formFileMultiple" multiple>
+          <input class="form-control" type="file" id="formFileMultiple" name="originName" accept="image/*" multiple>
         </div>
         <br>
         <button class="btn btn-primary" type="submit">작성 완료</button>
@@ -234,6 +222,7 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
 
+  <div th:replace="store/footer"></div>
 </body>
 
 </html>
