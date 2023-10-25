@@ -21,4 +21,5 @@ public class FileAttach {
 
     @ManyToOne
     Board board;
+    String imageUrl;
 }
