@@ -101,8 +101,9 @@
             });
 
             async function checkDuplicateId(userEmail) {
-                let email = document.getElementById("email").value
-                const data = await fetch("/emailCheck?email=" + email);
+                let email = document.getElementById("email").value;
+                const data = 
+                 fetch("/emailCheck?email=" + email);
                 const res = await data.text();
 
                 if (res === "유효하지 않은 이메일입니다.") {
@@ -156,7 +157,7 @@
 
             async function checkDuplicatePhoneNum(userPhoneNum) {
                 const data = await fetch("/phoneNumCheck/phoneNum" + phoneNum)
-                const res = data.text();
+                const res = await data.text();
                 if (res === "휴대폰 번호를 다시 확인해주세요.") {
                     formPhoneNum.setCustomValidity("사용불가");
                 }
