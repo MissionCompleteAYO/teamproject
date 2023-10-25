@@ -7,3 +7,4 @@ import com.example.teamproject.model.Feedback;
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     
 }
+123
