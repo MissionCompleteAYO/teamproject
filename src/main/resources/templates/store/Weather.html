@@ -1,0 +1,49 @@
+<body>
+    <h1 id="position">위치:</h1>
+    <h1 id="lat">위도:</h1>
+    <h1 id="lon">경도:</h1>
+    <hr>
+    <h1 id="currentTemp">현재기온:</h1>
+    <h1 id="maxTemp">최고기온:</h1>
+    <h1 id="minTemp">최저기온:</h1>
+    <hr>
+    <h1 id="weather">날씨:</h1>
+    <h1 id="icon"></h1>
+    <h1 id="food">추천 음식:</h1>
+</body>
+
+<script>
+    async function run() {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=gwangju&appid=78c62d9c42ac2d15d7db2aa743edd37b&units=metric`;
+        const data = await fetch(url); // non-blocking
+        const res = await data.json();
+        // console.log(res);
+        // console.log(res.main.temp);
+        // console.log(res.main.temp_max);
+        // console.log(res.main.temp_min);
+        document.querySelector("#currentTemp").innerHTML += ' ' + res.main.temp;
+        document.querySelector("#maxTemp").innerHTML += ' ' + res.main.temp_max;
+        document.querySelector("#minTemp").innerHTML += ' ' + res.main.temp_min;
+        const weatherCondition = res.weather[0].main;
+        document.querySelector("#weather").innerHTML += ' ' + weatherCondition;
+        document.querySelector("#icon").innerHTML = '<img src="https://openweathermap.org/img/wn/' + res.weather[0].icon + '@2x.png">';
+        document.querySelector("#position").innerHTML += ' ' + res.name;
+        document.querySelector("#lat").innerHTML += ' ' + res.coord.lat;
+        document.querySelector("#lon").innerHTML += ' ' + res.coord.lon;
+        const foodMapping = {
+            'Clear': ['../../static/picture/profile3.jpg', '../../static/picture/profile3.jpg'],
+            'Clouds': ['../../static/picture/bbq.png', '../../static/picture/bbq.png'],
+            'Thunderstorm': ['../../static/picture/bbq.png', '../../static/picture/bbq.png'],
+            'Drizzle': ['../../static/picture/bbq.png', '../../static/picture/bbq.png'],
+            'Rain': ['../../static/picture/bbq.png', '../../static/picture/bbq.png'],
+            'Snow': ['../../static/picture/bbq.png', '../../static/picture/bbq.png'],
+            'Atmosphere': ['../../static/picture/bbq.png', '../../static/picture/bbq.png']
+        }
+        const foodImageUrls = foodMapping[weatherCondition];
+        for (let i = 0; i < foodImageUrls.length; i++) {
+            const foodImageUrl = foodImageUrls[i];
+            document.querySelector("#food").innerHTML += '<img src="' + foodImageUrl + '">';
+        }
+    }
+    run();
+</script>
