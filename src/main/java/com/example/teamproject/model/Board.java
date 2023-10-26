@@ -47,5 +47,8 @@ public class Board {
     }
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    List<Comment> Comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     List<FileAttach> fileAttachs = new ArrayList<>();
 }

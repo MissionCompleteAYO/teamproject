@@ -12,6 +12,7 @@ import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = "board")
 public class Comment {
     @Id
     @GeneratedValue

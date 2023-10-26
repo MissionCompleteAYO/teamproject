@@ -31,8 +31,8 @@
                     </div>
                     <div class="col-6">
                         <div>
-                            <div th:text="${comment.like}"></div>
-                            <span th:text="${comment.unlike}"></span>
+                            <div th:text="${comment != null ? comment.like : 0}"></div>
+                            <span th:text="${comment != null ? comment.unlike : 0}"></span>
                         </div>
                         <br>
                         <div class="row">
@@ -41,20 +41,20 @@
                                     placeholder="이 리뷰를 평가해 줘!!" />
                             </div>
     
-                            <button class="btn col-1" type="button" id="like" onclick="likeCheck(like=1)">
+                            <button class="btn col-1" type="button" id="like" onclick="like(1)">
                                 <img src="/Detail/thumb-up-32.png" alt="이미지" />
                             </button>
     
-                            <button class="btn col-1 text-center" type="button" id="unlike" onclick="likeCheck(like=0)">
+                            <button class="btn col-1 text-center" type="button" id="unlike" onclick="like(0)">
                                 <img src="/Detail/thumb-down-32.png" alt="이미지" />
                             </button>
                         </div>
                         <div>
                             <table class="table">
                                     <tr th:each="comment : ${commentList}" th:attr="id=${comment.id}">
-                                        <td th:text="${comment.content}" scope="row" colspan="3"></td>
-                                        <td th:text="${comment.user.name}"></td>
-                                        <td th:text="${comment.writeDateTime}"></td>
+                                        <td th:text="${comment != null ? comment.content : ""}" scope="row" colspan="3"></td>
+                                        <td th:text="${comment != null ? comment.user.name : ""}"></td>
+                                        <td th:text="${comment != null ? comment.writeDateTime : ""}"></td>
                                     </tr>
                             </table>
                         </div>
@@ -71,10 +71,13 @@
 </html>
 
 <script>
-    async function likeCheck(like) {
+    async function like(like) {
         const content = document.querySelector("[name=content]").value;
+        console.log(content);
 
         const data = await fetch(`/store/like-check?content=${content}&like=${like}`);
+        console.log(data);
         const result = await data.text();
+        console.log(result)
     }
 </script>
