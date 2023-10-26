@@ -58,8 +58,6 @@ public class BoardController {
     @PostMapping("/write")
     public String writePost(@ModelAttribute Board board,
             @RequestParam(value = "originName", required = false) List<MultipartFile> mFiles) {
-                System.out.println(board);
-                System.out.println(mFiles);
 
         String loggedUser = (String) session.getAttribute("user_info");
 
@@ -90,15 +88,19 @@ public class BoardController {
                         String originalFileName = mFile.getOriginalFilename();
                         byte[] fileBytes = mFile.getBytes();
 
-                        String storagePath = "/storageImage";
+                        String storagePath = "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
+
                         Path filePath = Paths.get(storagePath, originalFileName);
+                        int slash = filePath.toString().lastIndexOf("\\");
+                        String relPath = filePath.toString().substring(slash-13);
+
                         Files.write(filePath, fileBytes);
 
                         FileAttach fileAttach = new FileAttach();
                         fileAttach.setOriginName(originalFileName);
                         String savedFileName = UUID.randomUUID().toString();
                         fileAttach.setSavedName(savedFileName);
-                        fileAttach.setFilePath(filePath.toString());
+                        fileAttach.setFilePath(relPath);
                         fileAttach.setBoard(board);
                         fileAttachRepository.save(fileAttach);
                     } catch (IOException e) {

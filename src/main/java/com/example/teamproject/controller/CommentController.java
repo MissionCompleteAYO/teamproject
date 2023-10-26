@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.teamproject.model.Board;
@@ -24,10 +25,14 @@ import com.example.teamproject.model.User;
 import com.example.teamproject.repository.BoardRepository;
 import com.example.teamproject.repository.CommentRepository;
 import com.example.teamproject.repository.FileAttachRepository;
+import com.example.teamproject.repository.UserRepository;
 
 @Controller
 @RequestMapping("/store")
 public class CommentController {
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     BoardRepository boardRepository;
@@ -46,19 +51,42 @@ public class CommentController {
         Optional<Board> boardData = boardRepository.findById(id);
         Board board = boardData.get();
         modelBoard.addAttribute("board", board);
-        System.out.println(modelBoard);
-        
 
         List<Comment> commentList = commentRepository.findByBoardId(id);
         modelComment.addAttribute("commentList", commentList);
-        System.out.println(modelComment);
 
         List<FileAttach> fileList = fileAttachRepository.findByBoardId(id);
         modelFile.addAttribute("fileList", fileList);
-        System.out.println(modelFile);
-
 
         return "store/comment";
+    }
+
+    @GetMapping("/like-check")
+    @ResponseBody
+    public String likeCheck(@RequestParam("content") String content,
+                            @RequestParam("like") Integer like,
+                            @ModelAttribute Comment comment,
+                            @ModelAttribute Board board) {
+
+        String email = comment.getBoard().getUser().getEmail();
+        Optional<User> dbUser = userRepository.findByEmail(email);
+
+        if(dbUser.isPresent()) {
+            return "alertComment";
+        } else {
+            if (like == 1) {
+                Integer sum = comment.getLike();
+                comment.setLike(sum++);
+                comment.setContent(content);
+                comment.setBoard(board);
+            } else {
+                Integer sum = comment.getUnlike();
+                comment.setUnlike(sum++);
+                comment.setContent(content);
+                comment.setBoard(board);
+            }
+        }
+        return "sucess";
     }
 
     @GetMapping("/detail")

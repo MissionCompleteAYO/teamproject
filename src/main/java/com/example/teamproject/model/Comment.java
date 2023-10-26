@@ -12,7 +12,6 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = "board")
 public class Comment {
     @Id
     @GeneratedValue
@@ -20,7 +19,9 @@ public class Comment {
 
     String content;
 
-    Integer likeUnlike;
+    Integer like;
+
+    Integer unlike;
 
     @ManyToOne
     Board board;
