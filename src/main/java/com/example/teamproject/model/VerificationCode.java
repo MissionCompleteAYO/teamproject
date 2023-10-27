@@ -11,9 +11,10 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Feedback {
+public class VerificationCode {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String cancelReason;   
-    private LocalDateTime cancelDate;   
+    private String email;
+    private Integer verificationCode;
+    private LocalDateTime expirationTime;
 }

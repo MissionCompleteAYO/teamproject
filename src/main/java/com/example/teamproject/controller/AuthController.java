@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,17 +14,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import com.example.teamproject.email.Mailer;
+import com.example.teamproject.email.SMTPAuthenticator;
 import com.example.teamproject.model.Feedback;
 import com.example.teamproject.model.User;
+import com.example.teamproject.model.VerificationCode;
 import com.example.teamproject.repository.FeedbackRepository;
 import com.example.teamproject.repository.UserRepository;
+import com.example.teamproject.repository.VerificationCodeRepository;
 import com.example.teamproject.util.Encrypt;
 
 @Controller
@@ -46,6 +52,12 @@ public class AuthController {
     @Autowired
     FeedbackRepository feedbackRepository;
 
+    @Autowired
+    SpringTemplateEngine templateEngine;
+
+    @Autowired
+    VerificationCodeRepository verificationCodeRepository;
+
     @GetMapping("/login")
     public String login() {
         return "auth/login";
@@ -53,25 +65,26 @@ public class AuthController {
 
     @Transactional
     @PostMapping("/login")
-    public String loginPost(
+    @ResponseBody
+    public Map<String, Object> loginPost(
             @RequestParam("email") String email,
-            @RequestParam("pw") String pw,
-            Model model) {
+            @RequestParam("pw") String pw) {
+        Map<String, Object> map = new HashMap<>();
+
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
-            String id = user.get().getEmail();
+            String emailId = user.get().getEmail();
             String userPw = user.get().getPw();
             boolean isMach = passwordEncoder.matches(pw, userPw);
-            if (id.equals(email) && isMach) {
+            if (emailId.equals(email) && isMach) {
+                map.put("result", true);
                 session.setAttribute("user_info", email);
-                return "redirect:/";
             } else {
-                model.addAttribute("error", "회원님이 입력한 정보가 올바르지 않습니다.");
+                map.put("result", false);
+                map.put("msg", "입력하신 정보가 올바르지 않습니다.");
             }
-        } else {
-            model.addAttribute("error", "이메일 아이디가 존재하지 않습니다.");
         }
-        return "auth/login";
+        return map;
     }
 
     @GetMapping("/logout")
@@ -93,9 +106,10 @@ public class AuthController {
             @RequestParam("pw") String pw,
             @RequestParam("phoneNum") String phoneNum,
             @RequestParam("address") String address) {
-        String emailCheckResult = emailCheck(email);
 
-        if (emailCheckResult.equals("사용가능한 이메일입니다.")) {
+        Map<String, Object> emailCheckResult = emailCheckPost(email);
+
+        if (emailCheckResult.get("msg").equals("사용 가능한 이메일 아이디입니다.")) {
             String encryptedPw = passwordEncoder.encode(pw);
             User user = new User();
             user.setName(name);
@@ -110,45 +124,50 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/emailCheck")
+    @PostMapping("/emailCheck")
     @ResponseBody
-    public String emailCheck(
+    public Map<String, Object> emailCheckPost(
             @RequestParam("email") String email) {
 
-        String result = "";
+        Map<String, Object> map = new HashMap<>();
 
         if (email == null || email.trim().isEmpty()) {
-            result = "유효하지 않은 이메일입니다.";
-        }
-
-        Optional<User> opt = userRepository.findByEmail(email);
-        if (opt.isPresent()) {
-            result = "유효하지 않은 이메일입니다.";
+            map.put("result", false);
+            map.put("msg", "이메일 형식이 올바르지 않습니다.");
         } else {
-            result = "사용가능한 이메일입니다.";
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isPresent()) {
+                map.put("result", false);
+                map.put("msg", "이미 등록된 이메일 아이디입니다.");
+            } else {
+                map.put("result", true);
+                map.put("msg", "사용 가능한 이메일 아이디입니다.");
+            }
         }
-        return result;
-    };
+        return map;
+    }
 
-    @GetMapping("/phoneNumCheck")
+    @PostMapping("/phoneNumCheck")
     @ResponseBody
-    public String phoneNumCheck(
+    public Map<String, Object> phoneNumCheck(
             @RequestParam("phoneNum") String phoneNum) {
-
-        String result = "";
+        Map<String, Object> map = new HashMap<>();
 
         if (phoneNum == null || phoneNum.trim().isEmpty()) {
-            result = "유효하지 않은 아이디입니다.";
-        }
-
-        Optional<User> opt = userRepository.findByEmail(phoneNum);
-        if (opt.isPresent()) {
-            result = "유효하지 않은 휴대폰 번호입니다.";
+            map.put("result", false);
+            map.put("msg", "유효하지 않은 휴대폰 번호입니다.");
         } else {
-            result = "사용가능한 휴대폰 번호입니다.";
+            Optional<User> user = userRepository.findByPhoneNum(phoneNum);
+            if (user.isPresent()) {
+                map.put("result", false);
+                map.put("msg", "이미 등록된 휴대폰 번호입니다.");
+            } else {
+                map.put("result", true);
+                map.put("msg", "사용 가능한 휴대폰 번호입니다.");
+            }
         }
-        return result;
-    };
+        return map;
+    }
 
     @GetMapping("/manage")
     public String manage() {
@@ -167,23 +186,35 @@ public class AuthController {
     @Transactional
     @PostMapping("/manage/changeMyInfo")
     @ResponseBody
-    public String changeMyInfoPost(
-            @ModelAttribute User user) {
+    public Map<String, Object> changeMyInfoPost(
+            @RequestParam("pw") String pw
+            // @RequestParam("phoneNum") String phoneNum,
+            // @RequestParam("address") String address
+            ) {
+        Map<String, Object> map = new HashMap<>();
+
         String userEmailId = (String) session.getAttribute("user_info");
-        String encodePw = passwordEncoder.encode(user.getPw());
-        if (user != null && user.getEmail().equals(userEmailId)) {
-            User userInfo = new User();
-            userInfo.setEmail(user.getEmail());
-            userInfo.setPw(encodePw);
-            userInfo.setPhoneNum(user.getPhoneNum());
-            userInfo.setAddress(user.getAddress());
-            userRepository.save(user);
-            return "redirect:/manage";
+        Optional<User> userId = userRepository.findByEmail(userEmailId);
+        String pwDb = userId.get().getPw();
+        if (userId.isPresent() && passwordEncoder.matches(pw, pwDb)) {
+            User user = userId.get();
+            String encodedPw = passwordEncoder.encode(pw);
+            user.setPw(encodedPw);
+            user.setPhoneNum(user.getPhoneNum());
+            user.setAddress(user.getAddress());
+            User updateUser = userRepository.save(user);
+            String emailId = updateUser.getEmail();
+            map.put("result", true);
+            map.put("msg", "입력하신 두 비밀번호가 일치합니다.");
+            session.setAttribute("user_info", emailId);
         } else {
-            return "auth/changeMyInfo";
+            map.put("result", false);
+            map.put("msg", "비밀번호가 일치하지 않습니다.");
         }
+        return map;
     }
 
+    @Transactional
     @PostMapping("/pwCheck")
     @ResponseBody
     public Map<String, Object> pwCheckPost(
@@ -211,6 +242,7 @@ public class AuthController {
         }
     }
 
+    @Transactional
     @PostMapping("/manage/deleteMyAccount")
     @ResponseBody
     public Map<String, Object> deleteMyAccountPost(
@@ -243,4 +275,77 @@ public class AuthController {
 
         return map;
     }
-}123
+
+    @Transactional
+    @GetMapping("/mail")
+    @ResponseBody
+    public Map<String, Object> mail(
+            @RequestParam("email") String email,
+            @RequestParam("verificationCode") String verificationCode) {
+        Map<String, Object> map = new HashMap<>();
+
+        if (verificationCode == null || verificationCode.trim().isEmpty()) {
+            map.put("result", false);
+            map.put("msg", "메일로 발송된 인증번호를 입력해 주세요.");
+        } else {
+            Optional<VerificationCode> mail = verificationCodeRepository.findByEmail(email);
+            if (mail.isPresent()) {
+                Integer code = mail.get().getVerificationCode();
+                if (code.equals(Integer.valueOf(verificationCode))) {
+                    map.put("result", true);
+                    map.put("msg", "인증번호가 일치합니다.");
+                } else {
+                    map.put("result", false);
+                    map.put("msg", "인증번호가 일치하지 않습니다.");
+                }
+            } else {
+                map.put("result", false);
+                map.put("msg", "해당 이메일에 대한 인증번호가 존재하지 않습니다.");
+            }
+        }
+        return map;
+    }
+
+    @Transactional
+    @PostMapping("/mail")
+    @ResponseBody
+    public Map<String, Object> mailPost(
+            @RequestParam("email") String email) {
+        Map<String, Object> map = new HashMap<>();
+
+        LocalDateTime time = LocalDateTime.now();
+        LocalDateTime expirationTime = time.plusMinutes(10);
+
+        Random random = new Random();
+        int verificationCode = 100000 + random.nextInt(900000); // 100000에서 999999까지의 랜덤 숫자 생성
+
+        Optional<VerificationCode> mail = verificationCodeRepository.findByEmail(email);
+        if (mail.isPresent()) {
+            VerificationCode oldMAil = mail.get();
+            oldMAil.setExpirationTime(expirationTime);
+            oldMAil.setVerificationCode(verificationCode);
+            verificationCodeRepository.save(oldMAil);
+        } else {
+            VerificationCode newMail = new VerificationCode();
+            newMail.setEmail(email);
+            newMail.setExpirationTime(expirationTime);
+            newMail.setVerificationCode(verificationCode);
+            verificationCodeRepository.save(newMail);
+        }
+
+        Context context = new Context();
+        context.setVariable("verificationCode", verificationCode);
+        String content = templateEngine.process("auth/emailnum", context);
+
+        Mailer mailer = new Mailer();
+        mailer.sendMail(
+                email, // 수신 이메일(관리자)
+                "[TeamProject] 이메일 인증번호가 도착하였습니다.", // [작성자 이메일]제목
+                content, // 본문
+                new SMTPAuthenticator()); // 인증
+        map.put("result", true);
+        map.put("msg", "인증번호가 발송되었습니다.");
+
+        return map;
+    }
+}

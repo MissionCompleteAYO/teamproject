@@ -12,6 +12,7 @@
   <!---->
 
   <!-- Bootstrap CSS (https://getbootstrap.kr/) -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
@@ -19,7 +20,7 @@
   <meta name="generator" content="Hugo 0.115.4">
   <meta name="theme-color" content="#712cf9">
 
-  <title>home 화면</title>
+  <title>Navbar + Footer 화면</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/jumbotrons/">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
@@ -33,54 +34,7 @@
       font-size: 25px;
     }
 
-    .nav-item {
-      margin-left: 50px;
-      margin-right: 50px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .collapse.navbar-collapse {
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .carousel-item {
-      top: 100px;
-      width: 300px;
-    }
-
-    #logForm {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-
-    .owl-stage-outer {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      margin-top: -195px;
-    }
-
-    .nav.col-md-4.justify-content-end {
-      display: flex;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
-      flex-direction: row;
-      flex-wrap: nowrap;
-    }
-
     /* Bootstrap Style (https://getbootstrap.kr/) */
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
     @media (min-width: 768px) {
       .bd-placeholder-img-lg {
         font-size: 3.5rem;
@@ -100,46 +54,6 @@
       flex-shrink: 0;
       width: 1.5rem;
       height: 100vh;
-    }
-
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
-
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
-
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .btn-bd-primary {
-      --bd-violet-bg: #712cf9;
-      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-      --bs-btn-font-weight: 600;
-      --bs-btn-color: var(--bs-white);
-      --bs-btn-bg: var(--bd-violet-bg);
-      --bs-btn-border-color: var(--bd-violet-bg);
-      --bs-btn-hover-color: var(--bs-white);
-      --bs-btn-hover-bg: #6528e0;
-      --bs-btn-hover-border-color: #6528e0;
-      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-      --bs-btn-active-color: var(--bs-btn-hover-color);
-      --bs-btn-active-bg: #5a23c8;
-      --bs-btn-active-border-color: #5a23c8;
     }
 
     .bd-mode-toggle {
@@ -249,10 +163,10 @@
 
     <div class="container my-5" style="height: 200px;">
       <div class="p-5 text-center bg-body-tertiary rounded-3" style="height: 225px;">
-        <h1 class="text-body-emphasis">소개글</h1>
+        <!-- <h1 class="text-body-emphasis">소개글</h1>
         <p class="col-lg-8 mx-auto fs-5 text-muted">
           소개글
-        </p>
+        </p> -->
       </div>
     </div>
 
@@ -262,7 +176,7 @@
       <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5"
         style="height: 120px;">
         <p class="col-lg-6 mx-auto mb-4">
-          내용
+          <!-- 내용1 -->
         </p>
       </div>
     </div>
@@ -273,46 +187,14 @@
       <div class="my-5">
         <div class="p-5 text-center rounded-3">
           <div class="container py-5">
-            <div class="owl-carousel">
-              <div class="carousel-item active">
-                <img src="./Photo/광주_문어랑(1).jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/여수_화룡신(1).jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/첨단.jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/1.jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/2.jpg" class="d-block w-100" alt="">
-              </div>
-            </div>
+            <!-- 내용2 -->
           </div>
         </div>
       </div>
     </div>
     <div class="p-5 text-center rounded-3">
       <div class="container my-5">
-        <div class="owl-carousel">
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_농성동_한우촌(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_매월동_돛앤닻(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_동구_동명동_이츠모(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_쌍촌동_항아리(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/3.jpg" class="d-block w-100" alt="">
-          </div>
-        </div>
+        <!-- 내용3 -->
       </div>
     </div>
 
@@ -330,36 +212,9 @@
       </footer>
     </div>
 
-    <script>
-      //default settings:
-      autoplay: false
-      autoplayTimeout: 5000
-      autoplayHoverPause: false
-
-      var owl = $('.owl-carousel');
-      owl.owlCarousel({
-        items: 5,
-        loop: true,
-        margin: 300,
-        autoplay: true,
-        autoplayTimeout: 3000,
-        autoplayHoverPause: true
-      });
-    </script>
-
     <script src="/js/bootstrap.bundle.min.js"
       integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
       </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        let editProfile = document.getElementById("edit-profile-icon")
-        editProfile.addEventListener("click", function () {
-          location.href = '/manage';
-        })
-
-      });
-    </script>
 
 </body>
 

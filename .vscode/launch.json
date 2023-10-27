@@ -2,11 +2,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-TeamprojectApplication<teamproject>",
+            "name": "Spring Boot-TeamprojectApplication<practice>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "mainClass": "com.example.teamproject.TeamprojectApplication",
-            "projectName": "teamproject",
+            "projectName": "practice",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
