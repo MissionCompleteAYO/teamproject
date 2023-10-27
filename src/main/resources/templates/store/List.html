@@ -133,164 +133,20 @@
       style="border: black solid 3px; border-radius: 10px; padding: 5px; margin: 5px; box-sizing: content-box;display: inline-block; font-weight: bold;">
       신규 매장이야 한번 이용해봐 임마!</div>
     <div class="p-5 text-center bg-body-tertiary rounded-5">
-
       <div class="row row-cols-1 row-cols-md-4 g-4">
-
-        <div class="col">
+        <div class="col" th:each="store : ${newstores}">
           <div class="card zoom-card">
-            <a href="/store/write" class="deco">
+            <a th:href="@{/store/map/{id}(id=${store.id})}" class="deco">
+              <!-- <a th:href="@{/store/detail/{id}(id=${store.id})}" class="deco"> -->
               <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
               <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
+                <h5 class="card-title" th:text="${store.name}"></h5>
+                <p class="card-text" th:text="${store.catchphrase}"></p>
               </div>
             </a>
           </div>
         </div>
       </div>
-
-      <br>
-
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <br>
-
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -299,112 +155,21 @@
   <div class="container my-5">
     <div
       style="border: black solid 3px; border-radius: 10px; padding: 5px; margin: 5px; box-sizing: content-box;display: inline-block; font-weight: bold;">
-      광고 광고 광고 광고!</div>
+      광고 광고 광고 광고야!</div>
     <div class="p-5 text-center bg-body-tertiary rounded-5">
-
       <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
+        <div class="col" th:each="store : ${adstores}">
           <div class="card zoom-card">
-            <a href="/store/write" class="deco">
+            <a th:href="@{/store/detail/{id}(id=${store.id})}" class="deco">
               <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
               <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      <br>
-
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card zoom-card">
-            <a href="/store/write" class="deco">
-              <img src="/picture/bbq.png" class="card-img-top" alt="bbq">
-              <div class="card-body">
-                <h5 class="card-title">BBQ</h5>
-                <p class="card-text">오늘저녁 BBQ어때? 맥주에 치킨 한마리 가자!</p>
+                <h5 class="card-title" th:text="${store.name}"></h5>
+                <p class="card-text" th:text="${store.catchphrase}"></p>
               </div>
             </a>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 

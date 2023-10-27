@@ -1,5 +1,6 @@
 package com.example.teamproject.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.teamproject.model.Board;
 import com.example.teamproject.model.FileAttach;
+import com.example.teamproject.model.Store;
 import com.example.teamproject.model.User;
+import com.example.teamproject.model.Visits;
 import com.example.teamproject.repository.BoardRepository;
 import com.example.teamproject.repository.FileAttachRepository;
+import com.example.teamproject.repository.StoreRepository;
 import com.example.teamproject.repository.UserRepository;
+import com.example.teamproject.repository.VisitsRepository;
 
 @Controller
 @RequestMapping("/store")
@@ -39,8 +44,27 @@ public class BoardController {
     @Autowired
     FileAttachRepository fileAttachRepository;
 
+    @Autowired
+    StoreRepository storeRepository;
+
+    @Autowired
+    VisitsRepository visitsRepository;
+
     @GetMapping("/list")
-    public String list() {
+    public String list(Model model) {
+        List<Store> newstores = new ArrayList<>();
+        newstores.addAll(storeRepository.findByName("빵빵아"));
+        newstores.addAll(storeRepository.findByName("벌크커피"));
+        newstores.addAll(storeRepository.findByName("벌크커피"));
+        model.addAttribute("newstores", newstores);
+
+        List<Store> adstores = new ArrayList<>();
+        adstores.addAll(storeRepository.findByName("예시"));
+        adstores.addAll(storeRepository.findByName("예시"));
+        adstores.addAll(storeRepository.findByName("예시"));
+        adstores.addAll(storeRepository.findByName("예시"));
+        adstores.addAll(storeRepository.findByName("교촌"));
+        model.addAttribute("adstores", adstores);
         return "store/list";
     }
 
@@ -48,7 +72,7 @@ public class BoardController {
     public String write() {
         return "store/write";
     }
-   
+
     @Transactional
     @PostMapping("/write")
     public String writePost(@ModelAttribute Board board,
@@ -155,5 +179,43 @@ public class BoardController {
             return "redirect:/store/change/" + boardId;
         }
         return "redirect:/store/detail";
+    }
+
+    @GetMapping("/")
+    public String store() {
+        return "store/store";
+    }
+
+    @PostMapping("/")
+    public String storePost(@ModelAttribute Store store) {
+        store.getName();
+        store.getCatchphrase();
+        storeRepository.save(store);
+        return "redirect:/store/";
+    }
+
+    @GetMapping("/map/{id}")
+    public String map(@PathVariable("id") Long id, Model model) {
+        Optional<Store> road = storeRepository.findById(id);
+        model.addAttribute("store", road.get());
+        return "store/map";
+    }
+
+    @GetMapping("/balloon")
+    public String balloon(Model model) {
+        Long userIdCount = userRepository.count();
+        Long boardIdCount = boardRepository.count();
+        Visits visit = visitsRepository.findAll().get(0);
+        Long visitIdCount = visit.getNumberOfVisitors();
+        model.addAttribute("userIdCount", userIdCount);
+        model.addAttribute("boardIdCount", boardIdCount);
+        model.addAttribute("visitIdCount", visitIdCount);
+        return "store/balloon";
+    }
+
+   @GetMapping("/weather")
+    public String weather() {
+     
+        return "store/weather";
     }
 }

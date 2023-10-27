@@ -41,4 +41,7 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     List<FileAttach> fileAttachs = new ArrayList<>();
+
+    @ManyToOne
+    Store store;
 }
