@@ -113,10 +113,10 @@ public class BoardController {
                         byte[] fileBytes = mFile.getBytes();
 
                         String storagePath = "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
-
+                        
                         Path filePath = Paths.get(storagePath, originalFileName);
                         int slash = filePath.toString().lastIndexOf("\\");
-                        String relPath = filePath.toString().substring(slash-13);
+                        String relPath = filePath.toString().substring(slash - 13);
 
                         Files.write(filePath, fileBytes);
 
@@ -236,9 +236,9 @@ public class BoardController {
         return "store/balloon";
     }
 
-   @GetMapping("/weather")
+    @GetMapping("/weather")
     public String weather() {
-     
+
         return "store/weather";
     }
 }

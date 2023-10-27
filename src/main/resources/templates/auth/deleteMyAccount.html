@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>회원탈퇴</title>
 
 <head>
     <meta charset="UTF-8">
@@ -152,45 +150,23 @@
                             feedback = v.value;
                         }
                     });
-            });
-            function show() {
-                const checkPwForm = document.getElementById("check-pw-form");
-                checkPwForm.style.display = "none";
-                const changeForm = document.getElementById("change-form");
-                changeForm.style.display = "block";
-            }
 
-            document.addEventListener("DOMContentLoaded", function () {
-                const deleteBtn = document.getElementById("deleteBtn");
-                deleteBtn.addEventListener("click", async function () {
-                    const isOK = await confirm("정말 탈퇴하시겠습니까?");
-                    if (isOK) {
-                        const radios = document.querySelectorAll(
-                            "[name=cancelReason]"
-                        );
-                        let feedback = "";
-                        radios.forEach((v, i) => {
-                            if (v.checked) {
-                                feedback = v.value;
-                            }
-                        });
+                    const formData = new FormData();
+                    formData.append("cancelReason", feedback);
 
-                        const formData = new FormData();
-                        formData.append("cancelReason", feedback);
+                    const data = await fetch("/manage/deleteMyAccount", {
+                        method: 'post',
+                        body: formData
+                    });
 
-                        const data = await fetch("/manage/deleteMyAccount", {
-                            method: "post",
-                            body: formData,
-                        });
-
-                        const res = await data.json();
-                        if (res.result == true) {
-                            alert(res.msg);
-                            location.href = "/";
-                        }
+                    const res = await data.json();
+                    if (res.result == true) {
+                        alert(res.msg); 
+                        location.href = '/';
                     }
-                });
-            });
+                }
+            })
+        });
 
         document.getElementById("prevBtn").addEventListener('click', function () {
             location.href = '/manage'

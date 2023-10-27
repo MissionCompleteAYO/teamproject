@@ -65,12 +65,12 @@ public class CommentController {
     @GetMapping("/like-check")
     @ResponseBody
     public String likeCheck(@RequestParam("content") String content,
-                            @RequestParam("like") Integer like,
-                            @ModelAttribute Comment comment,
-                            @ModelAttribute Board board,
-                            @ModelAttribute User user,
-                            @RequestParam("boardId") Long boardId) {
-                                
+            @RequestParam("like") Integer like,
+            @ModelAttribute Comment comment,
+            @ModelAttribute Board board,
+            @ModelAttribute User user,
+            @RequestParam("boardId") Long boardId) {
+
         User dbUser = (User) session.getAttribute("user_info");
         Long userId = dbUser.getId();
 
@@ -112,7 +112,7 @@ public class CommentController {
         }
         commentRepository.save(comment);
         System.out.println("저장완료");
-        
+
         return "/store/comment";
     }
 
