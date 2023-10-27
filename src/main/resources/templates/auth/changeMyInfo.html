@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=2.0,minimum-scale=1,viewport-fit=cover">
+
+    <title>회원가입</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
+        integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <style>
+        form.validation-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 25px;
+            justify-content: center;
+            height: 700px;
+        }
+
+        .form-control {
+            width: 350px;
+        }
+
+        .btn.btn-primary {
+            width: 350px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/manage/changeMyInfo" class="validation-form" method="post" novalidate>
+        <h1 class="h3 mb-4 fw-normal"
+            style="text-decoration: none; color: black; text-align: center; display: block; width: 600px;">
+            개인정보변경
+            <hr style="border: 1px solid black;">
+        </h1>
+        <div class="form-group"
+            style="border: 1px solid #ccc; padding: 20px; width: 600px; display: flex; flex-direction: column; align-items: center;">
+            <div class="form-floating">
+                <label class="form-label" for="updatePw">새 비밀번호 *</label>
+                <input type="password" class="form-control" id="updatePw" name="updatePw" autocomplete="off" required>
+                <div id="pw-vaild" class="invalid-feedback">비밀번호가 유효하지 않습니다.</div>
+            </div>
+            <div class="form-floating">
+                <label class="form-label" for="updatePwConfirm">새 비밀번호 확인 *</label>
+                <input type="password" class="form-control" id="updatePwConfirm" name="updatePwConfirm"
+                    autocomplete="off" required>
+                <div id="pwConfirm-vaild" class="invalid-feedback">입력한 두 비밀번호가 일치하지 않습니다.</div>
+            </div>
+            <div class="form-floating">
+                <label class="form-label" for="updatePhoneNum">새 휴대폰 번호 *</label>
+                <input type="text" class="form-control" id="updatePhoneNum" name="updatePhoneNum" maxlength="13"
+                    required>
+                <div id="phoneNum-Match" class="invalid-feedback"></div>
+            </div>
+            <div class="form-floating">
+                <label class="form-label" for="address" style="display: block;">새 주소 *</label>
+                <input type="text" class="form-control" disabled="disabled" id="address_postcode" placeholder="우편번호"
+                    style="width: 220px; display: inline-block;" required>
+                <button type="button" class="btn btn-dark" onclick="address_execDaumPostcode()">우편번호 찾기</button>
+                <input type="text" class="form-control" id="address_address" name="address" placeholder="주소"
+                    required><br>
+                <input type="text" class="form-control" id="address_detailAddress" placeholder="상세주소" required>
+            </div>
+            <button id="updateBtn" class="btn btn-primary" type="submit">개인정보 변경</button>
+        </div>
+    </form>
+
+    <script>
+        // form 제출 시 사용자가 입력한 값이 false일 경우의 변수 생성 -> 제출 막는 용도
+        let isPass = [false, false, false, false, false, false];
+
+        // 비밀번호 유효성 검사, 입력한 두 비밀번호 일치확인
+        document.addEventListener("DOMContentLoaded", function () {
+            const formPw = document.querySelector('#updatePw');
+            const formPwConfirm = document.querySelector('#updatePwConfirm');
+            const pwRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+            formPw.addEventListener('input', function () {
+                if (pwRegex.test(formPw.value)) {
+                    formPw.setCustomValidity("");
+                    console.log("비번 형식 통과");
+                    pwMatch();
+                } else {
+                    formPw.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
+                    updateBtn.disabled = true;
+                    console.log("비번 형식 미통과");
+                }
+                formPw.reportValidity();
+            });
+
+            formPwConfirm.addEventListener('input', function () {
+                if (pwRegex.test(formPwConfirm.value)) {
+                    formPwConfirm.setCustomValidity("");
+                    pwMatch();
+                } else {
+                    formPwConfirm.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
+                    updateBtn.disabled = true;
+                }
+                formPwConfirm.reportValidity();
+            });
+
+            function pwMatch() {
+                
+                if (formPw.value === formPwConfirm.value) {
+                    updateBtn.disabled = false;
+                    console.log("비밀번호 일치");
+                } else {
+                    updateBtn.disabled = true;
+                    console.log("비밀번호 불일치");
+                }
+            }
+
+        });
+
+
+        // 휴대폰 번호 유효성 검사-통과 -> 중복 검사
+        document.addEventListener("DOMContentLoaded", function () {
+            const formPhoneNum = document.querySelector('#updatePhoneNum');
+            formPhoneNum.addEventListener('input', async function () {
+                const phoneNumRegex = /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/;
+                if (phoneNumRegex.test(formPhoneNum.value)) {
+                    let phoneNum = formPhoneNum.value;
+                    phoneNum = phoneNum.replace(/-/g, "");
+                    const formData = new FormData();
+                    formData.append("phoneNum", phoneNum);
+                    const data = await fetch('/phoneNumCheck', {
+                        method: 'post',
+                        body: formData
+                    });
+                    const res = await data.json();
+                    if (res.result == true) {
+                        formPhoneNum.setCustomValidity("");
+                        document.querySelector('#phoneNum-Match').innerHTML = res.msg;
+                        console.log("등록 가능한 휴대전화번호");
+                    } else {
+                        formPhoneNum.setCustomValidity("등록된 번호");
+                        document.querySelector('#phoneNum-Match').innerHTML = res.msg;
+                        console.log("등록된 휴대전화번호");
+                    }
+                } else {
+                    formPhoneNum.setCustomValidity("유효하지 않은 휴대폰 번호");
+                    document.querySelector('#phoneNum-Match').innerHTML = res.msg;
+                    console.log("유효하지 않은 휴대전화번호");
+                }
+            })
+        });
+
+        // 폼(회원가입) 제출 시 유효성 통과 -> 가입 / 미통과 -> 가입불가
+        window.addEventListener('load', () => {
+            const forms = document.getElementsByClassName('validation-form');
+
+            Array.prototype.filter.call(forms, (form) => {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    </script>
+
+    <!-- 카카오맵(다음) 주소 bootstrap -->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function address_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        //     document.getElementById("address_extraAddress").value = extraAddr;
+
+                        // } else {
+                        //     document.getElementById("address_extraAddress").value = '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('address_postcode').value = data.zonecode;
+                    document.getElementById("address_address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("address_detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+</body>
+
+</html>

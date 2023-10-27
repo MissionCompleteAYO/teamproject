@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2.0,minimum-scale=1,viewport-fit=cover">
+    
     <title>로그인</title>
 
     <!-- Bootstrap CSS -->
@@ -32,19 +35,47 @@
     <form action="/login" method="post">
         <div class="form-group">
             <h1 class="h3 mb-3 fw-normal"><a href="/"
-                style="text-decoration: none; color: black; text-align: center; display: block;">
-                TeamProject</a>
+                    style="text-decoration: none; color: black; text-align: center; display: block;">
+                    TeamProject</a>
             </h1><br>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" placeholder="이메일 아이디">
+                <input type="email" class="form-control" id="email" name="email" value="vosejzld@naver.com" placeholder="이메일 아이디" required>
+                <div class="invalid-feedback">입력하신 이메일 아이디를 확인해주세요.</div>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호" autocomplete="off">
+                <input type="password" class="form-control" id="pw" name="pw" value="tjdals884!" placeholder="비밀번호" autocomplete="off" required>
+                <div class="invalid-feedback">비밀번호가 올바르지 않습니다.</div>
             </div><br>
-            <button class="btn btn-primary">로그인</button><br>
+            <button class="btn btn-primary" id="logBtn" type="submit">로그인</button><br>
             <h6><a href="/signup">회원가입</a></h6>
         </div>
     </form>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginBtn = document.querySelector('#logBtn');
+            loginBtn.addEventListener('click', async function (e) {
+                e.preventDefault();
+                const email = document.querySelector('#email').value;
+                const pw = document.querySelector('#pw').value;
+                const formData = new FormData();
+                formData.append("email", email);
+                formData.append("pw", pw);
+                const data = await fetch("/login", {
+                    method: 'post',
+                    body: formData
+                });
+                const res = await data.json();
+                if (res.result == true) {
+                    location.href = '/';
+                } else {
+                    alert(res.msg);
+                    location.href = '/login';
+                }
+            })
+        });
+    </script>
 </body>
+
 
 </html>
