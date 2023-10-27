@@ -11,4 +11,5 @@ import com.example.teamproject.model.FileAttach;
 @Repository
 public interface FileAttachRepository extends JpaRepository<FileAttach, Long> {
     public List<FileAttach> findByBoard(Board board);
+    public List<FileAttach> findByBoardId(Long boardId);
 }

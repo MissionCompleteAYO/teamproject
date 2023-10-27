@@ -4,17 +4,7 @@
 <head>
   <link rel="stylesheet" href="/css/owl.carousel.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<<<<<<< HEAD
   <script src="/js/owl.carousel.min.js"></script>
-=======
-  <script src="../js/owl.carousel.min.js"></script>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
-    integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
-  <!---->
-
-  <!-- Bootstrap CSS (https://getbootstrap.kr/) -->
->>>>>>> 87561eaa2f63df4555bc2836e4eab85f403f18dd
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/css/bootstrap.min.css" rel="stylesheet"
@@ -276,23 +266,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="/store/list">게시판</a>
               </li>
-<<<<<<< HEAD
-=======
-              <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li> -->
->>>>>>> 87561eaa2f63df4555bc2836e4eab85f403f18dd
               <li class="nav-item">
                 <a th:if="${session.user_info != null}" href="/logout" class="nav-link active"
                   aria-current="page">로그아웃</a>
@@ -302,7 +275,6 @@
         </div>
       </div>
     </nav>
-<<<<<<< HEAD
 
     <div class="container my-5" style="height: 220px;">
       <div class="p-3 text-center bg-body-tertiary rounded-4" style="height: 250px;">
@@ -332,85 +304,14 @@
           <div class="text">누적방문수</div>
           <div class="number" th:text="${visitIdCount}"></div>
         </div>
-=======
-
-    <div class="container my-5" style="height: 200px;">
-      <div class="p-5 text-center bg-body-tertiary rounded-3" style="height: 225px;">
-        <h1 class="text-body-emphasis">소개글</h1>
-        <p class="col-lg-8 mx-auto fs-5 text-muted">
-          소개글
-        </p>
->>>>>>> 87561eaa2f63df4555bc2836e4eab85f403f18dd
       </div>
     </div>
     <div class="b-example-divider"></div>
-<<<<<<< HEAD
     
         <div class="container py-5">
           <div id="food" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
         </div>
      
-=======
-
-    <div class="container my-5" style="height: 100px; margin-bottom: 20px;">
-      <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5"
-        style="height: 120px;">
-        <p class="col-lg-6 mx-auto mb-4">
-          내용
-        </p>
-      </div>
-    </div>
-
-    <div class="b-example-divider"></div>
-
-    <div class="my-5-container" style="margin-bottom: 70px;">
-      <div class="my-5">
-        <div class="p-5 text-center rounded-3">
-          <div class="container py-5">
-            <div class="owl-carousel">
-              <div class="carousel-item active">
-                <img src="./Photo/광주_문어랑(1).jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/여수_화룡신(1).jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/첨단.jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/1.jpg" class="d-block w-100" alt="">
-              </div>
-              <div class="carousel-item active">
-                <img src="./Photo/2.jpg" class="d-block w-100" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="p-5 text-center rounded-3">
-      <div class="container my-5">
-        <div class="owl-carousel">
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_농성동_한우촌(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_매월동_돛앤닻(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_동구_동명동_이츠모(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/광주_서구_쌍촌동_항아리(1).jpg" class="d-block w-100" alt="">
-          </div>
-          <div class="carousel-item active">
-            <img src="./Photo/3.jpg" class="d-block w-100" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-
->>>>>>> 87561eaa2f63df4555bc2836e4eab85f403f18dd
     <div class="b-example-divider"></div>
 
     <div class="container">
@@ -424,7 +325,6 @@
         </ul>
       </footer>
     </div>
-<<<<<<< HEAD
 </body>
 
 <script>
@@ -487,40 +387,4 @@
   run();
 </script>
 
-=======
-
-    <script>
-      //default settings:
-      autoplay: false
-      autoplayTimeout: 5000
-      autoplayHoverPause: false
-
-      var owl = $('.owl-carousel');
-      owl.owlCarousel({
-        items: 5,
-        loop: true,
-        margin: 300,
-        autoplay: true,
-        autoplayTimeout: 3000,
-        autoplayHoverPause: true
-      });
-    </script>
-
-    <script src="/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-      </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        let editProfile = document.getElementById("edit-profile-icon")
-        editProfile.addEventListener("click", function () {
-          location.href = '/manage';
-        })
-
-      });
-    </script>
-
-</body>
-
->>>>>>> 87561eaa2f63df4555bc2836e4eab85f403f18dd
 </html>

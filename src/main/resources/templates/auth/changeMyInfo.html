@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <title>개인정보 변경</title>
 
 <head>
     <meta charset="UTF-8">
@@ -148,8 +150,26 @@
                     document.querySelector('#phoneNum-Match').innerHTML = res.msg;
                     console.log("유효하지 않은 휴대전화번호");
                 }
-            })
-        });
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                document
+                    .getElementById("check-btn")
+                    .addEventListener("click", async function () {
+                        const pw = document.querySelector("#pw").value;
+                        const formData = new FormData();
+                        formData.append("pw", pw);
+                        const data = await fetch("/pwCheck", {
+                            method: "post",
+                            body: formData,
+                        });
+                        const res = await data.json();
+                        if (res.result == true) {
+                            show();
+                        } else {
+                            alert(res.msg);
+                        }
+                    });
+            });
 
         // 폼(회원가입) 제출 시 유효성 통과 -> 가입 / 미통과 -> 가입불가
         window.addEventListener('load', () => {
