@@ -23,6 +23,7 @@
                         </div>
                         <br>
                         <div>
+                            <p name="boardId">[[${board.id}]]</p>
                             <p th:text="'제목 : ' + ${board.title}"></p>
                             <p th:text="'작성자 : ' + ${board.user.name}"></p>
                             <p th:text="${board.content}"></p>
@@ -52,9 +53,9 @@
                         <div>
                             <table class="table">
                                     <tr th:each="comment : ${commentList}" th:attr="id=${comment.id}">
-                                        <td th:text="${comment != null ? comment.content : ""}" scope="row" colspan="3"></td>
-                                        <td th:text="${comment != null ? comment.user.name : ""}"></td>
-                                        <td th:text="${comment != null ? comment.writeDateTime : ""}"></td>
+                                        <td th:text="${comment.content }" scope="row" colspan="3"></td>
+                                        <td th:text="${comment.user.name}"></td>
+                                        <td th:text="${comment.writeDateTime}"></td>
                                     </tr>
                             </table>
                         </div>
@@ -73,11 +74,11 @@
 <script>
     async function like(like) {
         const content = document.querySelector("[name=content]").value;
-        console.log(content);
+        const boardId = document.querySelector("[name=boardId]").textContent;
 
-        const data = await fetch(`/store/like-check?content=${content}&like=${like}`);
-        console.log(data);
+        const data = await fetch(`/store/like-check?boardId=${boardId}&content=${content}&like=${like}`);
+
         const result = await data.text();
-        console.log(result)
+
     }
 </script>

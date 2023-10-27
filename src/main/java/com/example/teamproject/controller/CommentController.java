@@ -1,5 +1,6 @@
 package com.example.teamproject.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,15 +52,12 @@ public class CommentController {
         Optional<Board> boardData = boardRepository.findById(id);
         Board board = boardData.get();
         modelBoard.addAttribute("board", board);
-        System.out.println(modelBoard);
 
         List<Comment> commentList = commentRepository.findByBoardId(id);
         modelComment.addAttribute("commentList", commentList);
-        System.out.println(modelComment);
 
         List<FileAttach> fileList = fileAttachRepository.findByBoardId(id);
         modelFile.addAttribute("fileList", fileList);
-        System.out.println(modelFile);
 
         return "store/comment";
     }
@@ -69,33 +67,53 @@ public class CommentController {
     public String likeCheck(@RequestParam("content") String content,
                             @RequestParam("like") Integer like,
                             @ModelAttribute Comment comment,
-                            @ModelAttribute Board board) {
-        
-        
+                            @ModelAttribute Board board,
+                            @ModelAttribute User user,
+                            @RequestParam("boardId") Long boardId) {
+                                
+        User dbUser = (User) session.getAttribute("user_info");
+        Long userId = dbUser.getId();
 
-        String email = comment.getBoard().getUser().getEmail();
-        System.out.println(email);
-        Optional<User> dbUser = userRepository.findByEmail(email);
-        System.out.println(dbUser);
+        System.out.println(content);
+        System.out.println(like);
+        System.out.println(boardId);
+        System.out.println(userId);
 
-        if(dbUser.isPresent()) {
-            return "alertComment";
-        } else {
-            if (like == 1) {
-                Integer sum = 0;
-                sum = comment.getLike();
-                comment.setLike(sum++);
-                comment.setContent(content);
-                comment.setBoard(board);
-            } else {
-                Integer sum = 0;
-                sum = comment.getUnlike();
-                comment.setUnlike(sum++);
-                comment.setContent(content);
-                comment.setBoard(board);
+        board.setId(boardId);
+        user.setId(userId);
+
+        System.out.println(board);
+        System.out.println(user);
+
+        if (like == 1) {
+            System.out.println("like==1 진입");
+            Integer sum = comment.getLike();
+            if (sum == null) {
+                sum = 0;
             }
+            comment.setLike(sum++);
+            comment.setContent(content);
+            comment.setBoard(board);
+            comment.setUser(user);
+            LocalDateTime wrtDtTm = LocalDateTime.now();
+            comment.setWriteDateTime(wrtDtTm);
+        } else {
+            System.out.println("like==0 진입");
+            Integer sum = comment.getUnlike();
+            if (sum == null) {
+                sum = 0;
+            }
+            comment.setUnlike(sum++);
+            comment.setContent(content);
+            comment.setBoard(board);
+            comment.setUser(user);
+            LocalDateTime wrtDtTm = LocalDateTime.now();
+            comment.setWriteDateTime(wrtDtTm);
         }
-        return "sucess";
+        commentRepository.save(comment);
+        System.out.println("저장완료");
+        
+        return "/store/comment";
     }
 
     @GetMapping("/detail")
