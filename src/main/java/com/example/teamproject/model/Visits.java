@@ -12,6 +12,6 @@ import lombok.Data;
 public class Visits {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    Long numberOfVisitors;
+    private Long id;
+    private Long numberOfVisitors;
 }

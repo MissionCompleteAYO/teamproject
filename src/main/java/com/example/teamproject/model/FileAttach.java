@@ -15,16 +15,16 @@ import lombok.ToString;
 public class FileAttach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String originName;
+    private String originName;
 
-    String savedName;
+    private String savedName;
 
     @ManyToOne
     Board board;
 
     // String imageUrl;
 
-    String filePath;
+    private String filePath;
 }

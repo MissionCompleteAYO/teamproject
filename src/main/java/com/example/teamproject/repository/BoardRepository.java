@@ -7,4 +7,5 @@ import com.example.teamproject.model.Board;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
+    
 }

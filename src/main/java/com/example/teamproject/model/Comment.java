@@ -1,32 +1,28 @@
 package com.example.teamproject.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import lombok.Data;
 import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = {"board", "user"})
+@ToString(exclude = { "board", "user" })
 public class Comment {
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
-    String content;
+    private String content;
 
-    Integer like;
+    private Integer like;
 
-    Integer unlike;
+    private Integer unlike;
 
     @ManyToOne
     Board board;
@@ -34,6 +30,6 @@ public class Comment {
     @ManyToOne
     User user;
 
-    LocalDateTime writeDateTime;
+    private LocalDateTime writeDateTime;
 
 }

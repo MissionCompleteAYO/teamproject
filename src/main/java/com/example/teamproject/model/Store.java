@@ -17,10 +17,10 @@ import lombok.Data;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String name;
-    String catchphrase;
-    String streetNameAddress;
+    private Long id;
+    private String name;
+    private String catchphrase;
+    private String streetNameAddress;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     List<Board> boards = new ArrayList<>();

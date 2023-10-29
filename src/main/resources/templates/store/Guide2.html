@@ -1,0 +1,18 @@
+<p>
+    "세션이 만료되었습니다. <span id="timer">3</span>초 후 로그인 페이지로
+    이동합니다. 재로그인 바립니다."
+</p>
+
+<script>
+    let count = parseInt(document.getElementById("timer").textContent);
+
+    const timer = setInterval(() => {
+        count--;
+        document.getElementById("timer").textContent = count;
+
+        if (count <= 0) {
+            clearInterval(timer);
+            location.href = "/login";
+        }
+    }, 1000);
+</script>

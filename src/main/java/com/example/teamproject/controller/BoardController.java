@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,18 +59,15 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model) {
         List<Store> newstores = new ArrayList<>();
-        newstores.addAll(storeRepository.findByName("빵빵아"));
-        newstores.addAll(storeRepository.findByName("벌크커피"));
-        newstores.addAll(storeRepository.findByName("벌크커피"));
+        newstores.addAll(storeRepository.findByName("광주인력개발원"));
+        newstores.addAll(storeRepository.findByName("123"));
+
         model.addAttribute("newstores", newstores);
 
         List<Store> adstores = new ArrayList<>();
-        adstores.addAll(storeRepository.findByName("예시"));
-        adstores.addAll(storeRepository.findByName("예시"));
-        adstores.addAll(storeRepository.findByName("예시"));
-        adstores.addAll(storeRepository.findByName("예시"));
-        adstores.addAll(storeRepository.findByName("교촌"));
+        adstores.addAll(storeRepository.findByName("광주인력개발원"));
         model.addAttribute("adstores", adstores);
+
         return "store/list";
     }
 
@@ -94,7 +92,6 @@ public class BoardController {
             return "redirect:/login";
         }
         User dbuser = optionalUser.get();
-
         if (board.getTitle().isEmpty() ||
                 board.getContent().isEmpty() ||
                 board.getCostEffectiveness() == null ||
@@ -113,7 +110,7 @@ public class BoardController {
                         byte[] fileBytes = mFile.getBytes();
 
                         String storagePath = "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
-                        
+
                         Path filePath = Paths.get(storagePath, originalFileName);
                         int slash = filePath.toString().lastIndexOf("\\");
                         String relPath = filePath.toString().substring(slash - 13);
@@ -134,10 +131,9 @@ public class BoardController {
                 }
             }
         }
-        board.setUser(dbuser);
+        board.setUser(dbuser);      
         boardRepository.save(board);
-
-        return "redirect:/store/detail";
+        return "redirect:/store/list";
     }
 
     @GetMapping("/change/{id}")
@@ -148,7 +144,8 @@ public class BoardController {
         String savedEmail = dbBoard.get().getUser().getEmail();
 
         if (!savedEmail.equals(dbUser.get().getEmail())) {
-            return "redirect:/store/detail";
+            Long storeId = boardRepository.findById(id).get().getStore().getId();
+            return "redirect:/store/detail/" + storeId;
         }
 
         List<FileAttach> savedFiles = fileAttachRepository.findByBoard(dbBoard.get());
@@ -181,17 +178,35 @@ public class BoardController {
             for (int i = 0; i < mFiles.size(); i++) {
                 MultipartFile mFile = mFiles.get(i);
                 if (!mFile.isEmpty()) {
-                    String originalFileName = mFile.getOriginalFilename();
-                    FileAttach fileAttach = new FileAttach();
-                    fileAttach.setOriginName(originalFileName);
-                    fileAttach.setSavedName(originalFileName);
-                    fileAttach.setBoard(board);
-                    fileAttachRepository.save(fileAttach);
+                    try {
+                        String originalFileName = mFile.getOriginalFilename();
+                        byte[] fileBytes = mFile.getBytes();
+
+                        String storagePath = "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
+
+                        Path filePath = Paths.get(storagePath, originalFileName);
+                        int slash = filePath.toString().lastIndexOf("\\");
+                        String relPath = filePath.toString().substring(slash - 13);
+
+                        Files.write(filePath, fileBytes);
+
+                        FileAttach fileAttach = new FileAttach();
+                        fileAttach.setOriginName(originalFileName);
+                        String savedFileName = UUID.randomUUID().toString();
+                        fileAttach.setSavedName(savedFileName);
+                        fileAttach.setFilePath(relPath);
+                        fileAttach.setBoard(board);
+                        fileAttachRepository.save(fileAttach);
+                    } catch (IOException e) {
+                        return "redirect:/store/write";
+                    }
+
                 }
             }
         }
         boardRepository.save(existingBoard);
-        return "redirect:/store/detail";
+        Long storeId = boardRepository.findById(id).get().getStore().getId();
+        return "redirect:/store/detail/" + storeId;
     }
 
     @GetMapping("/delete/{id}")

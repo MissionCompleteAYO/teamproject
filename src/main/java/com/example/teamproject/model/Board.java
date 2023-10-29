@@ -26,17 +26,17 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String title;
+    private String title;
 
-    Integer costEffectiveness;
+    private Integer costEffectiveness;
 
-    Integer quality;
+    private Integer quality;
 
-    Integer service;
+    private Integer service;
 
-    Integer unique;
+    private Integer unique;
 
-    Integer waitingTime;
+    private Integer waitingTime;
 
     @Column(length = 1000)
     String content;

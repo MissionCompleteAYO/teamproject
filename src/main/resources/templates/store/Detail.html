@@ -1,72 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Bootstrap demo</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-            crossorigin="anonymous"
-        />
-    </head>
-    <body>
-        <div class="container my-5">
-            <div class="p-5 text-center bg-body-tertiary rounded-3">
-                <div class="container row gx-5">
-                    <div class="container col-6">
-                        <div>
-                            <div class="container text-center">
-                                <h2>음식점 이름</h2>
-                                <br />
-                                <div class="row row-cols-4">
-                                    <div class="col">
-                                        <img src="" alt="image" />
-                                    </div>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+            <div class="container row gx-5">
+                <div class="container col-6">
+                    <div>
+                        <div class="container text-center">
+                            <h2 th:text="${store.name}"></h2>
+                            <br />
+                            <div class="row row-cols-4">
+                                <div class="col">
+                                    <img src="" alt="image" />
                                 </div>
-                                <div>지도</div>
                             </div>
+                            <input type="text" id="address" placeholder="주소를 입력하세요"
+                                th:value="${store.streetNameAddress}" hidden>
+                            <button id="search" hidden>검색</button>
+                            <div id="map" style="width:500px;height:400px;"></div>
                         </div>
                     </div>
-                    <div class="container col-6">
-                        <div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="row" colspan="3">제목</th>
-                                        <th scope="col" colspan="1">작성자</th>
-                                        <th scope="col" colspan="1">날짜</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        th:each="board : ${list}"
-                                        th:attr="id=${board.id}"
-                                    >
-                                        <th scope="row" colspan="3">
-                                            <a
-                                                th:href="@{/store/comment/{id}(id=${board.id})}"
-                                                style="text-decoration: none"
-                                                >[[${board.title}]]</a
-                                            >
-                                        </th>
-                                        <td th:text="${board.user.name}"></td>
-                                        <td
-                                            th:text="${board.registrationDateBoard}"
-                                        ></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="container col-6">
+                    <a href="/store/write"><button type="button" class="btn btn-primary mb-4" >리뷰 쓰기</button></a>
+                    <div>
+                        <table class="table">
+                        
+                            <thead>
+                                <tr>
+                                    <th scope="row" colspan="3">제목</th>
+                                    <th scope="col" colspan="1">작성자</th>
+                                    <th scope="col" colspan="1">날짜</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="board : ${list}" th:attr="id=${board.id}">
+                                    <th scope="row" colspan="3">
+                                        <a th:href="@{/store/comment/{id}(id=${board.id})}"
+                                            style="text-decoration: none">[[${board.title}]]</a>
+                                    </th>
+                                    <td th:text="${board.user.name}"></td>
+                                    <td th:text="${board.registrationDateBoard}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-            crossorigin="anonymous"
-        ></script>
-    </body>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+
+
+
+<script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9b54861d0c93000a3e6defaa4159c4f5&libraries=services"></script>
+<script>
+    var searchButton = document.getElementById('search');
+    var coords; searchButton.addEventListener('click', function () {
+        var address = document.getElementById('address').value;
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(address, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                console.log('주소: ' + address);
+                console.log('위도: ' + coords.getLat());
+                console.log('경도: ' + coords.getLng());
+                var map = new kakao.maps.Map(container, { center: coords, level: 2 });
+                var marker = new kakao.maps.Marker({ position: coords });
+                marker.setMap(map);
+                var iwContent = '<div style="padding:10px;"><strong>환영합니다!!</strong></div>',
+                    iwPosition = new kakao.maps.LatLng(coords.getLat() + 0.00015, coords.getLng()),
+                    iwRemoveable = true;
+                var infowindow = new kakao.maps.InfoWindow({
+                    map: map, position: iwPosition, content: iwContent, removable: iwRemoveable
+                });
+            } else {
+                console.log('주소 검색에 실패하였습니다. 다시 시도해주세요.');
+            }
+        });
+    });
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567), level: 2
+    };
+    var map = new kakao.maps.Map(container, options);
+    if (document.getElementById('address').value !== '') {
+        searchButton.click();
+    } 
+</script>
+
 </html>
