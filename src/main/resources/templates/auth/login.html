@@ -38,12 +38,16 @@
                     style="text-decoration: none; color: black; text-align: center; display: block;">
                     TeamProject</a>
             </h1><br>
+            <div id="loginError" style="display: none; color: white; font-weight: bold; font-size: 14px; background-color: red; margin-bottom: 10px;">
+                로그인 정보가 일치하지 않습니다.
+            </div>
+
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="vosejzld@naver.com" placeholder="이메일 아이디" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="이메일 아이디" required>
                 <div class="invalid-feedback">입력하신 이메일 아이디를 확인해주세요.</div>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="pw" name="pw" value="tjdals884!" placeholder="비밀번호" autocomplete="off" required>
+                <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호" autocomplete="off" required>
                 <div class="invalid-feedback">비밀번호가 올바르지 않습니다.</div>
             </div><br>
             <button class="btn btn-primary" id="logBtn" type="submit">로그인</button><br>
@@ -69,8 +73,7 @@
                 if (res.result == true) {
                     location.href = '/';
                 } else {
-                    alert(res.msg);
-                    location.href = '/login';
+                    loginError.style.display = 'block';
                 }
             })
         });

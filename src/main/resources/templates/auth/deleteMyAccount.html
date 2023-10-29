@@ -50,6 +50,9 @@
                 본인확인을 진행합니다.<br>
                 <span style="font-weight: bold;">비밀번호</span>를 입력해주세요.
             </span><br>
+            <div id="pwCheckError" style="display: none; color: white; font-weight: bold; font-size: 14px; background-color: red; margin-bottom: 10px;">
+               비밀번호가 올바르지 않습니다.
+            </div>
             <div class="form-floating"
                 style="border: 1px solid #ccc; padding: 20px; width: 600px; display: flex; flex-direction: column; align-items: center;">
                 <input type="password" class="form-control mt-3" id="pw" name="pw" placeholder="비밀번호" autocomplete="off" required
@@ -124,7 +127,7 @@
                 if (res.result == true) {
                     show();
                 } else {
-                    alert(res.msg);
+                    pwCheckError.style.display = 'block';
                 }
             })
         });

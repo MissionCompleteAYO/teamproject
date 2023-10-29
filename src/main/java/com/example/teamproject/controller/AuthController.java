@@ -149,21 +149,25 @@ public class AuthController {
 
     @PostMapping("/phoneNumCheck")
     @ResponseBody
-    public Map<String, Object> phoneNumCheck(
-            @RequestParam("phoneNum") String phoneNum) {
+    public Map<String, Object> phoneNumCheckPost(
+            @RequestParam("phoneNum") String phoneNum,
+            @ModelAttribute User user) {
         Map<String, Object> map = new HashMap<>();
 
         if (phoneNum == null || phoneNum.trim().isEmpty()) {
             map.put("result", false);
             map.put("msg", "유효하지 않은 휴대폰 번호입니다.");
         } else {
-            Optional<User> user = userRepository.findByPhoneNum(phoneNum);
-            if (user.isPresent()) {
-                map.put("result", false);
-                map.put("msg", "이미 등록된 휴대폰 번호입니다.");
-            } else {
+            Optional<User> userPhoneNum = userRepository.findByPhoneNum(phoneNum);
+            if (userPhoneNum.isPresent()) {
+                System.out.println(userPhoneNum.get());
                 map.put("result", true);
+                map.put("msg", "이미 등록된 휴대폰 번호입니다.");
+                System.out.println("등록");
+            } else {
+                map.put("result", false);
                 map.put("msg", "사용 가능한 휴대폰 번호입니다.");
+                System.out.println("사용");
             }
         }
         return map;
@@ -187,29 +191,26 @@ public class AuthController {
     @PostMapping("/manage/changeMyInfo")
     @ResponseBody
     public Map<String, Object> changeMyInfoPost(
-            @RequestParam("pw") String pw
-            // @RequestParam("phoneNum") String phoneNum,
-            // @RequestParam("address") String address
-            ) {
+            @RequestParam("pw") String pw,
+            @RequestParam("phoneNum") String phoneNum,
+            @RequestParam("address") String address) {
         Map<String, Object> map = new HashMap<>();
-
         String userEmailId = (String) session.getAttribute("user_info");
         Optional<User> userId = userRepository.findByEmail(userEmailId);
-        String pwDb = userId.get().getPw();
-        if (userId.isPresent() && passwordEncoder.matches(pw, pwDb)) {
-            User user = userId.get();
-            String encodedPw = passwordEncoder.encode(pw);
-            user.setPw(encodedPw);
-            user.setPhoneNum(user.getPhoneNum());
-            user.setAddress(user.getAddress());
-            User updateUser = userRepository.save(user);
-            String emailId = updateUser.getEmail();
+        String encodedPw = passwordEncoder.encode(pw);
+        if (userId.isPresent()) {
+            User userInfo = userId.get();
+            userInfo.setPw(encodedPw);
+            userInfo.setPhoneNum(phoneNum);
+            userInfo.setAddress(address);
+            User updateUser = userRepository.save(userInfo);
+            String updateEmailId = updateUser.getEmail();
+            session.setAttribute("user_info", updateEmailId);
             map.put("result", true);
-            map.put("msg", "입력하신 두 비밀번호가 일치합니다.");
-            session.setAttribute("user_info", emailId);
+            map.put("msg", "개인정보가 변경되었습니다.");
         } else {
             map.put("result", false);
-            map.put("msg", "비밀번호가 일치하지 않습니다.");
+            map.put("msg", "개인정보 변경에 실패하였습니다.");
         }
         return map;
     }

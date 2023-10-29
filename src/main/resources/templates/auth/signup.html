@@ -38,47 +38,54 @@
         </h1><br>
         <div class="form-group">
             <label class="form-label mt-1" for="name">이름 *</label>
-            <input type="text" class="form-control" id="name" name="name" value="김성민" required>
+            <input type="text" class="form-control" id="name" name="name" required>
             <div class="invalid-feedback"></div>
         </div>
-        <div class="form-group">
-            <label class="form-label" for="email" style="display: block;">이메일 *</label>
-            <input type="email" class="form-control mb-1" id="email" name="email" value="vosejzld@naver.com"
-                style="width: 220px; display: inline-block;" required>
-            <button type="button" class="btn btn-dark" id="verificationCode-Request">인증번호 요청</button>
-            <div id="email-Match" class="invalid-feedback"></div>
-            <div>
-                <input type="text" class="form-control" maxlength="6" style="width: 220px; display: inline-block;"
-                    id="verificationCode-Matching" placeholder="인증번호 입력" required>
+        <div class="form-group" style="display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: flex-start;">
+                <div style="position: relative; width: 220px;">
+                    <label class="form-label" for="email" style="display: block;">이메일 *</label>
+                    <input type="email" class="form-control mb-1" id="email" name="email" 
+                        style="width: 210px;" required>
+                    <div id="email-Match" class="invalid-feedback"></div>
+                </div>
+                <button type="button" class="btn btn-dark" id="verificationCode-Request" style="margin-top: 30px;">인증번호
+                    요청</button>
+            </div>
+            <div style="display: flex; align-items: flex-start;">
+                <div style="position: relative; width: 220px;">
+                    <input type="text" class="form-control" maxlength="6" id="verificationCode-Matching"
+                        placeholder="인증번호 입력" style="width: 210px;" required>
+                    <div id="Code-Match" class="invalid-feedback"></div>
+                </div>
                 <button type="button" class="btn btn-dark" id="verificationCode-Check">인증번호 확인</button>
-                <div id="Code-Match" class="invalid-feedback">메일로 발송된 인증번호를 입력해주세요.</div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group mt-2">
             <label class="form-label" for="pw">비밀번호 *</label>
-            <input type="password" class="form-control" id="pw" name="pw" value="tjdals884!" required>
+            <input type="password" class="form-control" id="pw" name="pw"  required>
             <div class="invalid-feedback">비밀번호가 유효하지 않습니다.</div>
         </div>
         <div class="form-group">
             <label class="form-label" for="passwordConfirm">비밀번호 확인 *</label>
-            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" value="tjdals884!"
+            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" 
                 required>
-            <div class="invalid-feedback">입력한 두 비밀번호가 일치하지 않습니다.</div>
+            <div id="pwConfirm-match" class="invalid-feedback">입력한 두 비밀번호가 일치하지 않습니다.</div>
         </div>
         <div class="form-group">
             <label class="form-label" for="phoneNum">휴대폰 번호 *</label>
-            <input type="text" class="form-control" id="phoneNum" name="phoneNum" value="01047569306" maxlength="13"
+            <input type="text" class="form-control" id="phoneNum" name="phoneNum"  maxlength="13"
                 required>
             <div id="phoneNum-Match" class="invalid-feedback"></div>
         </div>
         <div class="form-group">
             <label class="form-label" for="address" style="display: block;">주소 *</label>
             <input type="text" class="form-control" disabled="disabled" id="address_postcode" placeholder="우편번호"
-                style="width: 220px; display: inline-block;" value="1" required>
+                style="width: 220px; display: inline-block;" required>
             <button type="button" class="btn btn-dark" onclick="address_execDaumPostcode()">우편번호 찾기</button>
-            <input type="text" class="form-control" id="address_address" name="address" placeholder="주소" value="1"
+            <input type="text" class="form-control" id="address_address" name="address" placeholder="주소" 
                 required><br>
-            <input type="text" class="form-control" id="address_detailAddress" placeholder="상세주소" value="1" required>
+            <input type="text" class="form-control" id="address_detailAddress" placeholder="상세주소" required>
             <!-- <input type="text" class="form-control" id="address_extraAddress" placeholder="참고항목"> -->
         </div>
         <button id="signupBtn" class="btn btn-primary" type="submit">가입완료</button>
@@ -118,6 +125,10 @@
                     const res = await data.json();
                     if (res.result == true) {
                         formEmail.setCustomValidity("");
+                        formEmail.classList.remove('is-invalid');
+                        formEmail.classList.add('is-valid');
+                        document.querySelector('#email-Match').classList.remove('invalid-feedback');
+                        document.querySelector('#email-Match').classList.add('valid-feedback');
                         document.querySelector('#email-Match').innerHTML = res.msg;
                         // console.log("사용가능 이메일");
                     } else {
@@ -142,85 +153,114 @@
             formPw.addEventListener('input', function () {
                 if (pwRegex.test(formPw.value)) {
                     formPw.setCustomValidity("");
-                    // console.log("비번 형식 통과");
-                    pwMatch();
                 } else {
                     formPw.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
                     signupBtn.disabled = true;
-                    // console.log("비번 형식 미통과");
                 }
+                pwMatch();
                 formPw.reportValidity();
             });
 
             formPwConfirm.addEventListener('input', function () {
                 if (pwRegex.test(formPwConfirm.value)) {
                     formPwConfirm.setCustomValidity("");
-                    pwMatch();
                 } else {
                     formPwConfirm.setCustomValidity("최소 8자, 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.");
                     signupBtn.disabled = true;
                 }
+                pwMatch();
                 formPwConfirm.reportValidity();
             });
 
             function pwMatch() {
                 if (formPw.value === formPwConfirm.value) {
                     signupBtn.disabled = false;
-                    // console.log("비밀번호 일치");
+                    formPwConfirm.classList.remove('is-invalid');
+                    formPwConfirm.classList.add('is-valid');
+                    document.querySelector('#pwConfirm-match').classList.remove('invalid-feedback');
+                    document.querySelector('#pwConfirm-match').classList.add('valid-feedback');
+                    document.querySelector('#pwConfirm-match').innerHTML = "입력하신 두 비밀번호가 일치합니다.";
                 } else {
                     signupBtn.disabled = true;
-                    // console.log("비밀번호 불일치");
+                    formPwConfirm.classList.remove('is-valid');
+                    formPwConfirm.classList.add('is-invalid');
+                    document.querySelector('#pwConfirm-match').classList.remove('valid-feedback');
+                    document.querySelector('#pwConfirm-match').classList.add('invalid-feedback');
+                    document.querySelector('#pwConfirm-match').innerHTML = "입력하신 두 비밀번호가 일치하지 않습니다.";
                 }
             }
-
         });
 
         // 휴대폰 번호 유효성 검사-통과 -> 중복 검사
         document.addEventListener("DOMContentLoaded", function () {
             const formPhoneNum = document.querySelector('#phoneNum');
+
             formPhoneNum.addEventListener('input', async function () {
                 const phoneNumRegex = /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/;
                 if (phoneNumRegex.test(formPhoneNum.value)) {
                     let phoneNum = formPhoneNum.value;
                     phoneNum = phoneNum.replace(/-/g, "");
                     const formData = new FormData();
-                    formData.append('phoneNum', phoneNum);
+                    formData.append("phoneNum", phoneNum);
                     const data = await fetch('/phoneNumCheck', {
                         method: 'post',
                         body: formData
                     });
                     const res = await data.json();
                     if (res.result == true) {
-                        formPhoneNum.setCustomValidity("");
+                        formPhoneNum.setCustomValidity("등록된 휴대전화번호");
+                        formPhoneNum.classList.remove('is-valid');
+                        formPhoneNum.classList.add('is-invalid');
+                        document.querySelector('#phoneNum-Match').classList.remove('valid-feedback');
+                        document.querySelector('#phoneNum-Match').classList.add('invalid-feedback');
                         document.querySelector('#phoneNum-Match').innerHTML = res.msg;
-                        // console.log("등록 가능한 휴대전화번호");
+                        console.log("등록된 휴대전화번호");
                     } else {
-                        formPhoneNum.setCustomValidity("등록된 번호");
+                        formPhoneNum.setCustomValidity("");
+                        formPhoneNum.classList.remove('is-invalid');
+                        formPhoneNum.classList.add('is-valid');
+                        document.querySelector('#phoneNum-Match').classList.remove('invalid-feedback');
+                        document.querySelector('#phoneNum-Match').classList.add('valid-feedback');
                         document.querySelector('#phoneNum-Match').innerHTML = res.msg;
-                        // console.log("등록된 휴대전화번호");
+                        console.log("등록 가능한 휴대전화번호");
                     }
                 } else {
-                    formPhoneNum.setCustomValidity("유효하지 않은 휴대폰 번호");
-                    document.querySelector('#phoneNum-Match').innerHTML = res.msg;
-                    // console.log("유효하지 않은 휴대전화번호");
+                    formPhoneNum.setCustomValidity("유효하지 않은 휴대전화번호");
+                    formPhoneNum.classList.remove('is-valid');
+                    formPhoneNum.classList.add('is-invalid');
+                    document.querySelector('#phoneNum-Match').classList.remove('valid-feedback');
+                    document.querySelector('#phoneNum-Match').classList.add('invalid-feedback');
+                    document.querySelector('#phoneNum-Match').innerHTML = "유효하지 않은 휴대전화 번호입니다.";
+                    console.log("유효하지 않은 휴대전화번호");
                 }
             })
         });
 
-        // 폼(회원가입) 제출 시 유효성 통과 -> 가입 / 미통과 -> 가입불가
-        window.addEventListener('load', () => {
-            const forms = document.getElementsByClassName('validation-form');
+        // 폼(회원가입) 제출 시 유효성 통과
+        window.addEventListener('load', function () {
+            var form = document.querySelector('.validation-form');
+            var inputs = document.getElementsByTagName('input');
 
-            Array.prototype.filter.call(forms, (form) => {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('input', function (event) {
+                    if (this.validity.valid) {
+                        this.classList.remove('is-invalid');
+                        this.nextElementSibling.style.display = 'none';
+                    } else {
+                        this.classList.add('is-invalid');
+                        this.nextElementSibling.style.display = 'block';
                     }
+                });
+            }
 
-                    form.classList.add('was-validated');
-                }, false);
-            });
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
         }, false);
 
         // 메일 인증번호 발송
@@ -252,11 +292,19 @@
                 const res = await data.json();
                 if (res.result == true) {
                     codeMatch.setCustomValidity("");
+                    codeMatch.classList.remove('is-invalid');
+                    codeMatch.classList.add('is-valid');
+                    document.querySelector('#Code-Match').classList.remove('invalid-feedback');
+                    document.querySelector('#Code-Match').classList.add('valid-feedback');
                     document.querySelector('#Code-Match').innerHTML = res.msg;
                     isPass[2] = true;
                     console.log("인증번호 일치");
                 } else {
                     codeMatch.setCustomValidity("인증번호 불일치");
+                    codeMatch.classList.remove('is-valid');
+                    codeMatch.classList.add('is-invalid');
+                    document.querySelector('#Code-Match').classList.remove('valid-feedback');
+                    document.querySelector('#Code-Match').classList.add('invalid-feedback');
                     document.querySelector('#Code-Match').innerHTML = res.msg;
                     isPass[2] = false;
                     console.log("인증번호 불일치");
