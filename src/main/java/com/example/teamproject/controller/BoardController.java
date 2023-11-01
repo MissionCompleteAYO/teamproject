@@ -5,12 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,28 +59,53 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model) {
         List<Store> newstores = new ArrayList<>();
-        newstores.addAll(storeRepository.findByName("광주인력개발원"));
         newstores.addAll(storeRepository.findByName("123"));
+        newstores.addAll(storeRepository.findByName("비비큐"));
+        newstores.addAll(storeRepository.findByName("교촌치킨"));
+        newstores.addAll(storeRepository.findByName("소촌옥 숯불갈비"));
+        newstores.addAll(storeRepository.findByName("맘스터치"));
+        newstores.addAll(storeRepository.findByName("굽탄"));
+        newstores.addAll(storeRepository.findByName("뼈다귀천국 소촌점"));
+        newstores.addAll(storeRepository.findByName("삼대족발"));
+        newstores.addAll(storeRepository.findByName("교촌치킨"));
+        newstores.addAll(storeRepository.findByName("광주인력개발원11"));
+        newstores.addAll(storeRepository.findByName("벌크커피"));
 
         model.addAttribute("newstores", newstores);
 
         List<Store> adstores = new ArrayList<>();
         adstores.addAll(storeRepository.findByName("광주인력개발원"));
+        adstores.addAll(storeRepository.findByName("카페 스태리"));
+        adstores.addAll(storeRepository.findByName("전라도이야기"));
+        adstores.addAll(storeRepository.findByName("토토로"));
+        adstores.addAll(storeRepository.findByName("힐링초밥"));
         model.addAttribute("adstores", adstores);
 
         return "store/list";
     }
 
-    @GetMapping("/write")
-    public String write() {
+    @GetMapping("/write/{id}")
+    public String write(Model model, @PathVariable("id") Long id) {
+        Optional<Store> dbStore = storeRepository.findById(id);
+        Store store = dbStore.get();
+        model.addAttribute("store", store);
+
         return "store/write";
+
     }
 
     @Transactional
-    @PostMapping("/write")
-    public String writePost(@ModelAttribute Board board,
+    @PostMapping("/write/{id}")
+    public String writePost(
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content,
+            @RequestParam(value = "costEffectiveness") Integer costEffectiveness,
+            @RequestParam(value = "quality") Integer quality,
+            @RequestParam(value = "unique") Integer unique,
+            @RequestParam(value = "waitingTime") Integer waitingTime,
+            @RequestParam(value = "service") Integer service,
+            @PathVariable("id") Long id,
             @RequestParam(value = "originName", required = false) List<MultipartFile> mFiles) {
-
         String loggedUser = (String) session.getAttribute("user_info");
 
         if (loggedUser == null || loggedUser.isEmpty()) {
@@ -92,49 +117,133 @@ public class BoardController {
             return "redirect:/login";
         }
         User dbuser = optionalUser.get();
-        if (board.getTitle().isEmpty() ||
-                board.getContent().isEmpty() ||
-                board.getCostEffectiveness() == null ||
-                board.getQuality() == null ||
-                board.getService() == null ||
-                board.getUnique() == null ||
-                board.getWaitingTime() == null) {
-            return "redirect:/store/write";
-        }
+        Board board = new Board();
+        board.setTitle(title);
+        board.setContent(content);
+        board.setCostEffectiveness(costEffectiveness);
+        board.setQuality(quality);
+        board.setUnique(unique);
+        board.setWaitingTime(waitingTime);
+        board.setService(service);
+        Date date = new Date();
+        board.setRegistrationDateBoard(date);
+        Store dbstore = storeRepository.findById(id).get();
+        board.setStore(dbstore);
+        board.setUser(dbuser);
+        Board savedBoard = boardRepository.save(board);
+
         if (mFiles != null && !mFiles.isEmpty()) {
             for (int i = 0; i < mFiles.size(); i++) {
                 MultipartFile mFile = mFiles.get(i);
                 if (!mFile.isEmpty()) {
                     try {
+
                         String originalFileName = mFile.getOriginalFilename();
                         byte[] fileBytes = mFile.getBytes();
 
                         String storagePath = "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
 
                         Path filePath = Paths.get(storagePath, originalFileName);
+
+                        Path directoryPath = filePath.getParent();
+                        if (!Files.exists(directoryPath)) {
+                            Files.createDirectories(directoryPath);
+
+                        }
                         int slash = filePath.toString().lastIndexOf("\\");
                         String relPath = filePath.toString().substring(slash - 13);
 
                         Files.write(filePath, fileBytes);
 
                         FileAttach fileAttach = new FileAttach();
+                        fileAttach.setBoard(savedBoard);
                         fileAttach.setOriginName(originalFileName);
                         String savedFileName = UUID.randomUUID().toString();
                         fileAttach.setSavedName(savedFileName);
                         fileAttach.setFilePath(relPath);
-                        fileAttach.setBoard(board);
                         fileAttachRepository.save(fileAttach);
                     } catch (IOException e) {
-                        return "redirect:/store/write";
+                        return "redirect:/store/write/" + id;
                     }
-
                 }
             }
         }
-        board.setUser(dbuser);      
-        boardRepository.save(board);
-        return "redirect:/store/list";
+        return "redirect:/store/detail/" + id;
     }
+    // @Transactional
+    // @PostMapping("/write/{id}")
+    // public String writePost(@ModelAttribute Board board,
+    // @PathVariable("id") Long id,
+    // @RequestParam(value = "originName", required = false) List<MultipartFile>
+    // mFiles) {
+    // String loggedUser = (String) session.getAttribute("user_info");
+
+    // if (loggedUser == null || loggedUser.isEmpty()) {
+    // return "redirect:/login";
+    // }
+    // Optional<User> optionalUser = userRepository.findByEmail(loggedUser);
+
+    // if (!optionalUser.isPresent()) {
+    // return "redirect:/login";
+    // }
+    // User dbuser = optionalUser.get();
+    // if (board.getTitle().isEmpty() ||
+    // board.getContent().isEmpty() ||
+    // board.getCostEffectiveness() == null ||
+    // board.getQuality() == null ||
+    // board.getService() == null ||
+    // board.getUnique() == null ||
+    // board.getWaitingTime() == null) {
+    // return "redirect:/store/write/"+id;
+    // }
+
+    // Optional<Store> store = storeRepository.findById(id);
+    // Store dbstore = store.get();
+    // board.setStore(dbstore);
+    // board.setUser(dbuser);
+    // Date date = new Date();
+    // board.setRegistrationDateBoard(date);
+    // Board savedBoard = boardRepository.save(board);
+
+    // if (mFiles != null && !mFiles.isEmpty()) {
+    // for (int i = 0; i < mFiles.size(); i++) {
+    // MultipartFile mFile = mFiles.get(i);
+    // if (!mFile.isEmpty()) {
+    // try {
+
+    // String originalFileName = mFile.getOriginalFilename();
+    // byte[] fileBytes = mFile.getBytes();
+
+    // String storagePath =
+    // "C:/Users/user/springboot/teamproject/src/main/resources/static/storageImage";
+
+    // Path filePath = Paths.get(storagePath, originalFileName);
+
+    // Path directoryPath = filePath.getParent();
+    // if (!Files.exists(directoryPath)) {
+    // Files.createDirectories(directoryPath);
+
+    // }
+    // int slash = filePath.toString().lastIndexOf("\\");
+    // String relPath = filePath.toString().substring(slash - 13);
+
+    // Files.write(filePath, fileBytes);
+
+    // FileAttach fileAttach = new FileAttach();
+    // fileAttach.setBoard(savedBoard);
+    // fileAttach.setOriginName(originalFileName);
+    // String savedFileName = UUID.randomUUID().toString();
+    // fileAttach.setSavedName(savedFileName);
+    // fileAttach.setFilePath(relPath);
+    // fileAttachRepository.save(fileAttach);
+    // } catch (IOException e) {
+    // return "redirect:/store/write/"+id;
+    // }
+    // }
+    // }
+    // }
+    // return "redirect:/store/detail/"+id;
+    // }
 
     @GetMapping("/change/{id}")
     public String change(Model model, @PathVariable("id") Long id) {

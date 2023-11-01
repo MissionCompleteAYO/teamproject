@@ -160,14 +160,11 @@ public class AuthController {
         } else {
             Optional<User> userPhoneNum = userRepository.findByPhoneNum(phoneNum);
             if (userPhoneNum.isPresent()) {
-                System.out.println(userPhoneNum.get());
                 map.put("result", true);
                 map.put("msg", "이미 등록된 휴대폰 번호입니다.");
-                System.out.println("등록");
             } else {
                 map.put("result", false);
                 map.put("msg", "사용 가능한 휴대폰 번호입니다.");
-                System.out.println("사용");
             }
         }
         return map;
@@ -263,9 +260,6 @@ public class AuthController {
             feedback.setCancelDate(parsDateTime);
             feedback.setCancelReason(cancelReason);
             feedbackRepository.save(feedback);
-            System.out.println(feedback);
-            System.out.println(feedbackRepository);
-
             userRepository.delete(userDb.get());
             session.invalidate();
             map.put("result", true);

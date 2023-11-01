@@ -1,84 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Bootstrap demo</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-            crossorigin="anonymous"
-        />
-    </head>
-    <body>
-        <div class="container my-5">
-            <div class="p-5 text-center bg-body-tertiary rounded-3">
-                <div class="row gx-5">
-                    <div class="col-6">
-                        <div class="row" style="display: flex; flex-wrap: wrap;">
-                            <div th:each="fileAttach : ${fileList}" th:attr="id=${fileAttach.id}" class="col" style="width: 30%; padding: 1px;">
-                                <img th:src="${fileAttach.filePath}" alt="image" style="object-fit: cover; width: 100%; height: 150px; border-radius: 10px;">
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+</head>
+
+
+<body>
+    <nav class="navbar navbar-dark bg-dark" aria-label="Dark offcanvas navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">TeamProject</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbarDark" aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation"
+                style="border: none; box-shadow: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list-ul"
+                    viewBox="0 0 16 16" style="color: white;">
+                    <path fill-rule="evenodd"
+                        d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                </svg>
+            </button>
+            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbarDark"
+                aria-labelledby="offcanvasNavbarDarkLabel" style="background-color: #212529;">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarDarkLabel" style="color: white;">TeamProject</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <div>
+                                <div th:if="${session.user_info != null}">
+                                    <svg id="edit-profile-icon" xmlns="http://www.w3.org/2000/svg" width="28"
+                                        height="28" fill="currentColor" class="bi bi-person-fill mb-2"
+                                        viewBox="0 0 16 16" style="cursor: pointer; color: white;">
+                                        <path
+                                            d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                                    </svg>
+                                    <p th:text="${session.user_info}" style="color: white;"></p>
+                                </div>
+                                <div th:unless="${session.user_info != null }">
+                                </div>
+                                <div>
+                                    <a th:if="${session.user_info == null}" th:href="@{/login}" class=="nav-link active"
+                                        aria-current="page"
+                                        style="text-decoration: none; color: white; font-weight: bold;">로그인</a>
+                                    <a th:if="${session.user_info == null}" th:href="@{/signup}" class="nav-link active"
+                                        aria-current="page"
+                                        style="text-decoration: none; color: white; font-weight: bold; margin-left: 10px;">회원가입</a>
+                                </div>
                             </div>
-                        </div>
-                        <br>
-                        <div>
-                            <p name="boardId">[[${board.id}]]</p>
-                            <p th:text="'제목 : ' + ${board.title}"></p>
-                            <p th:text="'작성자 : ' + ${board.user.name}"></p>
-                            <p th:text="${board.content}"></p>
-                            <p th:text="'작성일시 : ' + ${board.registrationDateBoard}"></p>
-                            <a th:href="@{/store/change/{id}(id=${board.id})}"><button type="button" class="btn btn-primary">리뷰 수정</button></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/store/list">게시판</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:if="${session.user_info != null}" href="/logout" class="nav-link active"
+                                aria-current="page">로그아웃</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+            <div class="row gx-5">
+                <div class="col-6">
+                    <div class="row" style="display: flex; flex-wrap: wrap">
+                        <div th:each="fileAttach : ${fileList}" th:attr="id=${fileAttach.id}" class="col"
+                            style="width: 30%; padding: 1px">
+                            <img th:src="${fileAttach.filePath}" alt="image" style="
+                                    object-fit: cover;
+                                    width: 100%;
+                                    height: 150px;
+                                    border-radius: 10px;
+                                " />
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div>
-                            <div th:text="${comment != null ? comment.like : 0}"></div>
-                            <span th:text="${comment != null ? comment.unlike : 0}"></span>
+                    <br />
+                    <div>
+                        <p name="boardId">[[${board.id}]]</p>
+                        <p th:text="'제목 : ' + ${board.title}"></p>
+                        <p th:text="'작성자 : ' + ${board.user.name}"></p>
+                        <p th:text="${board.content}"></p>
+                        <p th:text="'작성일시 : ' + ${board.registrationDateBoard}"></p>
+                        <a th:href="@{/store/change/{id}(id=${board.id})}"><button type="button"
+                                class="btn btn-primary">
+                                리뷰 수정
+                            </button></a>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row align-items-center">
+                        <div class="col-10 move-left">
+                            <input type="text" id="content" name="content" class="form-control"
+                                placeholder="이 리뷰를 평가해 줘!!" />
                         </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-10">
-                                <input type="text" id="content" name="content" class="form-control"
-                                    placeholder="이 리뷰를 평가해 줘!!" />
-                            </div>
-    
-                            <button class="btn col-1" type="button" id="like" onclick="like(1)">
+
+                        <div class="col-1">
+                            <button class="btn col-1 position-relative" type="button" id="like" onclick="like(1)">
                                 <img src="/Detail/thumb-up-32.png" alt="이미지" />
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">[[${board.numLike}]]</span>
                             </button>
-    
-                            <button class="btn col-1 text-center" type="button" id="unlike" onclick="like(0)">
+                        </div>
+
+                        <div class="col-1 move-left">
+                            <button class="btn col-1 text-center position-relative" type="button" id="unlike"
+                                onclick="like(0)">
                                 <img src="/Detail/thumb-down-32.png" alt="이미지" />
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">[[${board.numUnlike}]]</span>
                             </button>
                         </div>
                         <div>
                             <table class="table">
-                                    <tr th:each="comment : ${commentList}" th:attr="id=${comment.id}">
-                                        <td th:text="${comment.content}" scope="row" colspan="3"></td>
-                                        <td th:text="${comment.user.name}"></td>
-                                        <td th:text="${comment.writeDateTime}"></td>
-                                    </tr>
+                                <tr th:each="comment : ${commentList}" th:attr="id=${comment.id}">
+                                    <td th:text="${comment.content}" scope="row" colspan="3"></td>
+                                    <td th:text="${comment.user.name}"></td>
+                                    <td th:text="${comment.writeDateTime}"></td>
+                                </tr>
                             </table>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <div class="container-footer" style="width: 1300px; height: auto; margin: auto;">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-body-secondary">&copy; Produced in 2023</p>
+            <a href="/"
+                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            </a>
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item">
+                    <a href="#" class="nav-link px-2 text-body-secondary" style="color: black;">Team (박준우, 김성민, 이상준)</a>
+                </li>
+            </ul>
+        </footer>
+    </div>
 </body>
 
 </html>
-
 <script>
     function like(like) {
         const content = document.querySelector("[name=content]").value;
         const boardId = document.querySelector("[name=boardId]").textContent;
 
-        location.href=`/store/like-check?boardId=${boardId}&content=${content}&like=${like}`;
-
-
+        location.href = `/store/like-check?boardId=${boardId}&content=${content}&like=${like}`;
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+    </script>
+
+<style>
+    .move-left {
+        margin-right: -15px;
+    }
+
+    body {
+        color: black;
+        font-weight: bold;
+    }
+</style>

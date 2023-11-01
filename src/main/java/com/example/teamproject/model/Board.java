@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -41,11 +40,14 @@ public class Board {
     @Column(length = 1000)
     String content;
 
-    @ManyToOne
-    User user;
-
     private Date registrationDateBoard;
 
+    private Integer numLike;
+
+    private Integer numUnlike;
+
+    @ManyToOne
+    User user;
     @ManyToOne
     Store store;
 

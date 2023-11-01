@@ -3,9 +3,7 @@ package com.example.teamproject.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -50,16 +48,15 @@ public class CommentController {
     @Autowired
     StoreRepository storeRepository;
 
-   @GetMapping("/comment/{id}")
-    public String comment(Model modelBoard, Model modelComment, Model modelFile, @PathVariable("id") Long id) {;
+    @GetMapping("/comment/{id}")
+    public String comment(Model modelBoard, Model modelComment, Model modelFile, @PathVariable("id") Long id) {
+        ;
         Optional<Board> boardData = boardRepository.findById(id);
         Board board = boardData.get();
 
         modelBoard.addAttribute("board", board);
 
-
-
-        List<Comment> commentList = commentRepository.findByBoardId(id);
+        List<Comment> commentList = commentRepository.findByBoardId(id, Sort.by(Sort.Direction.DESC, "writeDateTime"));
         modelComment.addAttribute("commentList", commentList);
 
         List<FileAttach> fileList = fileAttachRepository.findByBoardId(id);
@@ -68,92 +65,61 @@ public class CommentController {
         return "store/comment";
     }
 
-
-
     @GetMapping("/like-check")
     public String likeCheck(@RequestParam("content") String content,
             @RequestParam("like") Integer like,
             @ModelAttribute Comment comment,
-            @ModelAttribute Board board,
-            @ModelAttribute User user,
-            @RequestParam("boardId") Long boardId) {
-
+            @RequestParam("boardId") Long boardId,
+            Model model) {
         String email = (String) session.getAttribute("user_info");
         Optional<User> dbUser = userRepository.findByEmail(email);
+        Optional<Board> dbBoard = boardRepository.findById(boardId);
 
-        if (dbUser.isPresent()){
-            Long userId = dbUser.get().getId();
+        User user = dbUser.get();
+        Board board = dbBoard.get();
 
-            System.out.println(content);
-            System.out.println(like);
-            System.out.println(boardId);
-            System.out.println(userId);
-
-            board.setId(boardId);
-            user.setId(userId);
-
-            System.out.println(board);
-            System.out.println(user);
+        if (dbUser.isPresent()) {
 
             if (like == 1) {
-                System.out.println("like==1 진입");
-                Integer sumLike = comment.getLike();
-                if (sumLike == null) {
-                    sumLike = 0;
-                }
-
-                Integer sumUnlike = comment.getUnlike();
-                if (sumUnlike == null) {
-                    sumUnlike = 0;
-                }
-
-                comment.setLike(sumLike++);
-                comment.setUnlike(sumUnlike);
-
+                comment.setLike(like);
             } else {
-                System.out.println("like==0 진입");
-                Integer sumUnlike = comment.getUnlike();
-                if (sumUnlike == null) {
-                    sumUnlike = 0;
-                }
-
-                Integer sumLike = comment.getLike();
-                if (sumLike == null) {
-                    sumLike = 0;
-                }
-                comment.setUnlike(sumUnlike++);
-                comment.setLike(sumLike);
-
+                comment.setLike(like);
             }
 
-                comment.setContent(content);
-                comment.setBoard(board);
-                comment.setUser(user);
-                LocalDateTime wrtDtTm = LocalDateTime.now();
-                comment.setWriteDateTime(wrtDtTm);
-        
+            comment.setContent(content);
+            comment.setBoard(board);
+            comment.setUser(user);
+            LocalDateTime wrtDtTm = LocalDateTime.now();
+            comment.setWriteDateTime(wrtDtTm);
+
             commentRepository.save(comment);
 
-            System.out.println("저장완료");
+            List<Comment> sumLike = commentRepository.findByBoardIdAndLike(boardId, 1);
+            List<Comment> sumUnlike = commentRepository.findByBoardIdAndLike(boardId, 0);
+            Integer numLike = sumLike.size();
+            Integer numUnlike = sumUnlike.size();
+            System.out.println(numLike);
+
+            board.setNumLike(numLike);
+            board.setNumUnlike(numUnlike);
+            boardRepository.save(board);
 
             return "redirect:/store/comment/" + boardId;
         }
-        
         return "/store/guide2";
-        
-
     }
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Long id) {
-        List<Board> list = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "registrationDateBoard"));
-        model.addAttribute("list", list);
         if (storeRepository.existsById(id)) {
             Store store = storeRepository.findById(id).get();
+
+            List<Board> list = boardRepository.findByStore(store,
+                    Sort.by(Sort.Direction.DESC, "registrationDateBoard"));
+            model.addAttribute("list", list);
             model.addAttribute("store", store);
             return "store/detail";
         }
-
         return "redirect:/store/list";
     }
 
